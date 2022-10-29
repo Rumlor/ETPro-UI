@@ -1,5 +1,7 @@
 
 import {
+    AccordionDetails,
+    AccordionSummary,
     Box,
     Button,
     Card,
@@ -18,10 +20,12 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {Accordion} from "@mui/material";
 function MarketPlace() {
 
 const [marketPlaces,setMarketPlaces] = useState(marketplacesJSON);
+const [commissionExpanded,setCommissionExpanded] = useState(false)
 
     function categoryControl(isCategoryBasedPricing) {
         if (isCategoryBasedPricing){
@@ -37,7 +41,7 @@ const [marketPlaces,setMarketPlaces] = useState(marketplacesJSON);
                 {
                     marketPlaces.map(marketPlace => (
 
-                        <Card sx={{ maxWidth: 345 }} >
+                        <Card key={marketPlace.platformName} sx={{ maxWidth: 345 }} >
                             <CardHeader title={
                                 <Typography variant={"h5"}>{marketPlace.platformName}</Typography>
                             }  action={
@@ -45,55 +49,53 @@ const [marketPlaces,setMarketPlaces] = useState(marketplacesJSON);
                                    <SettingsIcon></SettingsIcon>
                                 </IconButton>}
                             />
-                            <CardContent>
+                            <CardContent >
                                 {
-                                    marketPlace.commissionAmounts.map(commission =>
-                                        (
-                                            <Grid>
-                                                <Grid item xs={14}>
-                                                    <Typography variant={"body2"} color="black" sx= {{  fontFamily: 'Monospace' ,padding:'0 -10px' ,margin:'0px 10px 0px 20px'}}>Komisyon</Typography>
-                                                    <Divider/>
-                                                    <div style={{display:'flex'}}>
-                                                                    <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' ,padding:'0 20px'}}>Tutar:</Typography>
-                                                                    <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' }}>{commission.amount} TL</Typography>
-                                                                </div>
+                                    <Accordion expanded={commissionExpanded} onChange={()=>{
+                                            if (commissionExpanded)
+                                                setCommissionExpanded(false)
+                                            else
+                                                setCommissionExpanded(true)
+                                        }}>
+                                        <AccordionSummary   expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+                                            <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                                                Komisyon
+                                            </Typography>
+                                            <Typography sx={{ color: 'text.secondary' ,margin:'0px 0px 0px 10px'}}>Komisyon Bilgileri</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                        {
+                                            marketPlace.commissionAmounts.map(commission =>
+                                                (
+                                                    <Grid >
+                                                        <Grid item xs={14}>
+                                                            <Typography variant={"body2"} color="black" sx= {{  fontFamily: 'Monospace' ,padding:'0 -10px' ,margin:'0px 10px 0px 20px'}}>Komisyon</Typography>
+                                                            <Divider/>
+                                                            <div style={{display:'flex'}}>
+                                                                            <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' ,padding:'0 20px'}}>Tutar:</Typography>
+                                                                            <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' }}>{commission.amount} TL</Typography>
+                                                            </div>
 
 
                                                             <div style={{display:'flex'}} >
-                                                                <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' ,padding:'0 -10px' ,margin:'0px 10px 0px 20px'}}>Kategori Bazlı:</Typography>
-                                                                <Typography variant={"body2"} color="darkred" sx={{ typography: 'subtitle2', fontFamily: 'Monospace' ,padding:'0 -10px'}} >{categoryControl(commission.isCategoryBasedPricing)}</Typography>
+                                                                        <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' ,padding:'0 -10px' ,margin:'0px 10px 0px 20px'}}>Kategori Bazlı:</Typography>
+                                                                        <Typography variant={"body2"} color="darkred" sx={{ typography: 'subtitle2', fontFamily: 'Monospace' ,padding:'0 -10px'}} >{categoryControl(commission.isCategoryBasedPricing)}</Typography>
 
                                                             </div>
 
 
 
-                                                </Grid>
+                                                        </Grid>
 
-                                            </Grid>
-                                        )
-                                    )
+                                                    </Grid>
+                                                )
+                                            )
+                                        }
+                                        </AccordionDetails>
+                                    </Accordion>
                                 }
                             </CardContent>
-                            <CardContent>
-                                {
 
-                                  marketPlace.shipmentAmounts.map(shipment=>(
-
-                                      <Grid>
-                                          <Grid item xs={14}>
-                                              <Typography variant={"body2"} color="black" sx= {{  fontFamily: 'Monospace' ,padding:'0 -10px' ,margin:'0px 10px 0px 20px'}}>Kargo</Typography>
-                                              <Divider/>
-                                              <div style={{display:'flex'}}>
-                                                  <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' ,padding:'0 20px'}}>Tutar:</Typography>
-                                                  <Typography variant={"body2"} color="darkred" sx= {{ typography: 'subtitle2' , fontFamily: 'Monospace' }}>{shipment.amount} TL</Typography>
-                                              </div>
-                                          </Grid>
-                                      </Grid>
-                                  ))
-
-
-                                }
-                            </CardContent>
                         </Card>
                 ))
                 }

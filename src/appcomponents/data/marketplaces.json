@@ -30,20 +30,10 @@
     "commissionAmounts": [
       {
         "amount": 10.87,
-        "categoryInfos": [
-          {
-            "categoryName": "Game"
-          }
-        ],
         "isCategoryBasedPricing": false
       },
       {
         "amount": 12.33,
-        "categoryInfos": [
-          {
-            "categoryName": "Game"
-          }
-        ],
         "isCategoryBasedPricing": false
       },
       {
@@ -53,7 +43,7 @@
             "categoryName": "Game"
           }
         ],
-        "isCategoryBasedPricing": false
+        "isCategoryBasedPricing": true
       }
     ],
     "shipmentAmounts": [
