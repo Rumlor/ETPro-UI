@@ -1,0 +1,124 @@
+[
+  {
+  "platformName": "Hepsiburada",
+  "commissionAmounts": [
+    {
+      "amount": 23.45,
+      "categoryInfos": [
+        {
+          "categoryName": "Game"
+        }
+      ],
+      "isCategoryBasedPricing": true
+    }
+  ],
+  "shipmentAmounts": [
+    {
+      "amount": 23.45,
+      "scaleInfo": null,
+      "volumeInfo": {
+        "order": 0,
+        "lowerBound": 1,
+        "upperBound": 4
+      },
+      "isVolumeBasedPricing": true
+    }
+  ]
+  },
+  {
+    "platformName": "Trendyol",
+    "commissionAmounts": [
+      {
+        "amount": 10.87,
+        "categoryInfos": [
+          {
+            "categoryName": "Game"
+          }
+        ],
+        "isCategoryBasedPricing": false
+      },
+      {
+        "amount": 12.33,
+        "categoryInfos": [
+          {
+            "categoryName": "Game"
+          }
+        ],
+        "isCategoryBasedPricing": false
+      },
+      {
+        "amount": 56.12,
+        "categoryInfos": [
+          {
+            "categoryName": "Game"
+          }
+        ],
+        "isCategoryBasedPricing": false
+      }
+    ],
+    "shipmentAmounts": [
+      {
+        "amount": 23.45,
+        "scaleInfo": null,
+        "volumeInfo": {
+          "order": 0,
+          "lowerBound": 1,
+          "upperBound": 4
+        },
+        "isVolumeBasedPricing": true
+      }
+    ]
+  },
+  {
+    "platformName": "N11",
+    "commissionAmounts": [
+      {
+        "amount": 78.34,
+        "categoryInfos": [
+          {
+            "categoryName": "Game"
+          }
+        ],
+        "isCategoryBasedPricing": true
+      }
+    ],
+    "shipmentAmounts": [
+      {
+        "amount": 23.45,
+        "scaleInfo": null,
+        "volumeInfo": {
+          "order": 0,
+          "lowerBound": 1,
+          "upperBound": 4
+        },
+        "isVolumeBasedPricing": true
+      }
+    ]
+  },
+  {
+    "platformName": "GittiGidiyor",
+    "commissionAmounts": [
+      {
+        "amount": 34.78,
+        "categoryInfos": [
+          {
+            "categoryName": "Game"
+          }
+        ],
+        "isCategoryBasedPricing": true
+      }
+    ],
+    "shipmentAmounts": [
+      {
+        "amount": 23.45,
+        "scaleInfo": null,
+        "volumeInfo": {
+          "order": 0,
+          "lowerBound": 1,
+          "upperBound": 4
+        },
+        "isVolumeBasedPricing": true
+      }
+    ]
+  }
+]
