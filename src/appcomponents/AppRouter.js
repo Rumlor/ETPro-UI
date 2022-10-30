@@ -1,4 +1,4 @@
-import MarketPlace from "./MarketPlace";
+import MarketPlace from "./marketplace/MarketPlace";
 import {BrowserRouter, Route,Routes} from "react-router-dom";
 import Product from "./Product";
 function AppRouter(){
