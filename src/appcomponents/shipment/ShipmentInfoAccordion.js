@@ -23,9 +23,9 @@ function ShipmentInfoAccordion(props){
             </AccordionSummary>
             <AccordionDetails>
                 {
-                    props.shipmentAmounts.map (shipment =>
+                    props.shipmentAmounts.map ((shipment,index) =>
                         (
-                            <ShipmentInfo shipment = {shipment} ></ShipmentInfo>
+                            <ShipmentInfo shipment = {shipment} shipmentIndex = {index} isVolumeBased={shipment.isVolumeBasedPricing} ></ShipmentInfo>
                         )
                     )
                 }

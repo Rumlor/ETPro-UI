@@ -10,6 +10,7 @@ import MarketPlaceCard from "./MarketPlaceCard";
 
 function MarketPlace() {
 
+    //data is fed here.
 const [marketPlaces,setMarketPlaces] = useState(marketplacesJSON);
 
     return(

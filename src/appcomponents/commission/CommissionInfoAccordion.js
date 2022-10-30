@@ -32,7 +32,7 @@ function CommissionInfoAccordion(props){
                 {
                     props.commissionAmounts.map(commission =>
                         (
-                            <CommissionInfo commission = {commission}></CommissionInfo>
+                            <CommissionInfo commission = {commission} categories={commission.categoryInfos}></CommissionInfo>
                         )
                     )
                 }
