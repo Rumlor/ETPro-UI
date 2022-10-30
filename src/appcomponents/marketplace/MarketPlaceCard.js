@@ -9,20 +9,11 @@ import {
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import {useState} from "react";
-import CommissionInfoAccordion from "./commission/CommissionInfoAccordion";
-import ShipmentInfoAccordion from "./shipment/ShipmentInfoAccordion";
+import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
+import ShipmentInfoAccordion from "../shipment/ShipmentInfoAccordion";
 
 function MarketPlaceCard(props){
     //mock data
-const [commissionExpanded,setCommissionExpanded] = useState(false)
-
-    function isCategoryBased(isCategoryBasedPricing) {
-
-        if(isCategoryBasedPricing)
-            return "Evet";
-        else
-            return "Hayır";
-    }
 
     return (
 
@@ -31,7 +22,8 @@ const [commissionExpanded,setCommissionExpanded] = useState(false)
                 <Typography variant={"h5"}>{props.marketPlace.platformName}</Typography>
             }  action={
                 <IconButton aria-label={"settings"}>
-                    <SettingsIcon></SettingsIcon>
+                    <SettingsIcon>
+                    </SettingsIcon>
                 </IconButton>}
             />
             <CardContent >

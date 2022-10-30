@@ -5,7 +5,7 @@ import {
 
 } from "@mui/material";
 import {useState} from "react";
-import marketplacesJSON from "./data/marketplaces.json";
+import marketplacesJSON from "../data/marketplaces.json";
 import MarketPlaceCard from "./MarketPlaceCard";
 
 function MarketPlace() {

@@ -1,5 +1,5 @@
 import './App.css';
-import MarketPlace from "./appcomponents/MarketPlace";
+import MarketPlace from "./appcomponents/marketplace/MarketPlace";
 
 
 
