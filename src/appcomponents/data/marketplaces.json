@@ -3,7 +3,7 @@
   "platformName": "Hepsiburada",
   "commissionAmounts": [
     {
-      "amount": 23.45,
+      "percent": 23.45,
       "categoryInfos": [
         {
           "categoryName": "Game"
@@ -29,21 +29,8 @@
     "platformName": "Trendyol",
     "commissionAmounts": [
       {
-        "amount": 10.87,
+        "percent": 10.87,
         "isCategoryBasedPricing": false
-      },
-      {
-        "amount": 12.33,
-        "isCategoryBasedPricing": false
-      },
-      {
-        "amount": 56.12,
-        "categoryInfos": [
-          {
-            "categoryName": "Game"
-          }
-        ],
-        "isCategoryBasedPricing": true
       }
     ],
     "shipmentAmounts": [
@@ -63,10 +50,25 @@
     "platformName": "N11",
     "commissionAmounts": [
       {
-        "amount": 78.34,
+        "percent": 78.34,
         "categoryInfos": [
           {
-            "categoryName": "Game"
+            "categoryName": "Oyun"
+          },
+          {
+            "categoryName": "Giyim"
+          },
+          {
+            "categoryName": "Kuşam"
+          }
+        ],
+        "isCategoryBasedPricing": true
+      },
+      {
+        "percent": 12.34,
+        "categoryInfos": [
+          {
+            "categoryName": "Oyun"
           }
         ],
         "isCategoryBasedPricing": true
@@ -89,10 +91,19 @@
     "platformName": "GittiGidiyor",
     "commissionAmounts": [
       {
-        "amount": 34.78,
+        "percent": 34.78,
         "categoryInfos": [
           {
             "categoryName": "Game"
+          }
+        ],
+        "isCategoryBasedPricing": true
+      },
+      {
+        "percent": 56.12,
+        "categoryInfos": [
+          {
+            "categoryName": "Kozmetik"
           }
         ],
         "isCategoryBasedPricing": true
@@ -100,14 +111,40 @@
     ],
     "shipmentAmounts": [
       {
-        "amount": 23.45,
-        "scaleInfo": null,
+        "amount": 13.34,
         "volumeInfo": {
           "order": 0,
           "lowerBound": 1,
           "upperBound": 4
         },
         "isVolumeBasedPricing": true
+      },
+      {
+        "amount": 23.45,
+        "scaleInfo": {
+          "order": 0,
+          "lowerBound": 0,
+          "upperBound": 100
+        },
+        "isVolumeBasedPricing": false
+      },
+      {
+        "amount": 45.67,
+        "scaleInfo": {
+          "order": 1,
+          "lowerBound": 100,
+          "upperBound": 200
+        },
+        "isVolumeBasedPricing": false
+      },
+      {
+        "amount": 67.78,
+        "scaleInfo": {
+          "order": 2,
+          "lowerBound": 200,
+          "upperBound": null
+        },
+        "isVolumeBasedPricing": false
       }
     ]
   }

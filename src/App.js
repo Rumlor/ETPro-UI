@@ -1,12 +1,14 @@
 import './App.css';
 import MarketPlace from "./appcomponents/MarketPlace";
-import {Container, Grid} from "@mui/material";
+
 
 
 
 function App() {
     return (
-<MarketPlace></MarketPlace>
+        <div style={{height:'100vh',width:'100vh', padding:'0px 0px', margin:'0px 0px'}}>
+            <MarketPlace></MarketPlace>
+        </div>
     );
 }
 
