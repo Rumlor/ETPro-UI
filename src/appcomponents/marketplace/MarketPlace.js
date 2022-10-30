@@ -1,9 +1,5 @@
 
-import {
-    Container,
-    Grid,
 
-} from "@mui/material";
 import {useState} from "react";
 import marketplacesJSON from "../data/marketplaces.json";
 import MarketPlaceCard from "./MarketPlaceCard";
