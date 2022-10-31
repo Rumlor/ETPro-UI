@@ -1,0 +1,27 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto","sans-serif";
+}
+.container {
+
+  background-size: cover;
+  position: relative;
+}
+.page-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  position: relative;
+  z-index: 2;
+}
+.page-heading h1 {
+  font-size: 5rem;
+  color: white;
+  font-weight: 300;
+  background-color: rgba(0,0,0,0.5);
+  padding: 0 20px;
+  border-radius: 2px;
+}
