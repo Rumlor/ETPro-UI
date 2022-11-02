@@ -16,7 +16,7 @@ function MarketPlaceCard(props){
 
     return (
 
-        <Card key={props.marketPlace.platformName} sx={{ maxWidth: 400}} className="marketplace-card">
+        <Card key={props.marketPlace.platformName} sx={{ width: 400}} className="marketplace-card">
             <CardHeader title={
                 <Typography variant={"h5"}>{props.marketPlace.platformName}</Typography>
             }  action={
