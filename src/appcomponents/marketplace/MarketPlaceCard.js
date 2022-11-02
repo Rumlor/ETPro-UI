@@ -8,16 +8,15 @@ import {
     Typography
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import {useState} from "react";
 import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
 import ShipmentInfoAccordion from "../shipment/ShipmentInfoAccordion";
-
+import "./MarketPlaceCard.css"
 function MarketPlaceCard(props){
     //mock data
 
     return (
 
-        <Card key={props.marketPlace.platformName} sx={{ maxWidth: 400}}>
+        <Card key={props.marketPlace.platformName} sx={{ maxWidth: 400}} className="marketplace-card">
             <CardHeader title={
                 <Typography variant={"h5"}>{props.marketPlace.platformName}</Typography>
             }  action={

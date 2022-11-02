@@ -10,7 +10,7 @@ function MarketPlace() {
 const [marketPlaces,setMarketPlaces] = useState(marketplacesJSON);
 
     return(
-        <div style={{height:'100vh',width:'1300px'}}>
+        <div style={{height:'100vh',width:'1300px',display:'flex'}}>
                 {
 
                             marketPlaces.map(marketPlace => (

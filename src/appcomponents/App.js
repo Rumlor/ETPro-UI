@@ -1,26 +1,23 @@
-import './App.css';
+
 import React from "react";
-import {BrowserRouter as Router, Switch, Route, Routes} from "react-router-dom";
-import MarketPlace from "./marketplace/MarketPlace";
-import Home from "./pages/Home"
 import Navbar from "./navbar/Navbar";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import "./App.css"
 
-
-
-
-
+import Home from "./pages/Home"
+import Product from "./product/Product";
+import MarketPlace from "./marketplace/MarketPlace";
 function App() {
+
     return (
-        <div className={"container"}>
-            <Router>
+        <BrowserRouter>
                 <Navbar/>
-                <Routes>
-                    <Route path ={"/"} element={<Home/>} />
-                    <Route path = {"/marketplaces"} element={<MarketPlace/>}/>
-                    <Route path ={"/home"} element={<Home/>} />
-                </Routes>
-            </Router>
-        </div>
+            <Routes>
+                <Route path={"/"}  element={<Home/>}></Route>
+                <Route path={"/marketplaces/list"}  element={<MarketPlace/>}></Route>
+                <Route path={"/products"} element={<Product/>}></Route>
+            </Routes>
+        </BrowserRouter>
     );
 }
 

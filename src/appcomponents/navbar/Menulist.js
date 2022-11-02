@@ -1,21 +1,25 @@
 export const Menulist = [
     {
         title:"Pazar Yerleri",
-        url:"/marketplaces",
+        url:"/marketplaces/list",
         subMenus:[
                 {
                     title:"Pazar Yeri Ekle",
-                    url:"add"
+                    url:"/marketplaces/add"
                 },
                 {
                     title:"Pazar Yeri Listele",
-                    url:"list"
+                    url:"/marketplaces/list"
                 }
 
             ]
     },
     {
+        title:"Ürünler",
+        url:"/products"
+    },
+    {
         title:"Ana Sayfa",
-        url:"/home"
+        url:"/"
     }
 ];

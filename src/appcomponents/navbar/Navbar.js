@@ -1,27 +1,40 @@
+import {Link} from "react-router-dom";
+import "./Navbar.css"
+import {UilCloudLock} from "@iconscout/react-unicons";
+import MenuDropDown from "./dropdown/MenuDropDown";
+import "./Menulist"
 import {Menulist} from "./Menulist";
-import "./Navbar.css";
-import {NavLink} from "react-router-dom";
-
+import {useState} from "react";
 
 export default function Navbar(){
-
-    const menuList = Menulist.map(
-         (item,index)=>{
-        return (
-            <li  key = {index} >
-                <NavLink to={item.url}>{item.title}</NavLink>
-            </li>
-        );
-    });
-
+    const [dropdown,setDropdown] = useState(false);
     return (
-        <nav>
-            <div className={"logo"}>
-                ET<font>Pro</font>
-            </div>
-            <ul className={"menu-list"}>
-                {menuList}
-            </ul>
-        </nav>
+        <>
+           <nav className={"navbar"}>
+                <Link to={"/"} className={"navbar-logo"}>
+                    ET<font className={"navbar-logo-font"}>PRO</font>
+                    <UilCloudLock size={30}/>
+                </Link>
+               <ul className={"menu-items"}>
+                   {
+                       Menulist.map((item,index)=>{
+                           if (item.title === 'Pazar Yerleri')
+                           {
+                               return (
+                                   <li key={index} className={"menu-item"} onMouseEnter={()=>setDropdown(true)} onMouseLeave={()=>setDropdown(false)}>
+                                       <Link to={item.url} >{item.title}</Link>
+                                       {dropdown && <MenuDropDown subMenus={item.subMenus}/>}
+                                   </li>
+                               )
+                           }
+                           return (<li key={index} className={"menu-item"}>
+                                   <Link to={item.url}>{item.title}</Link>
+                               </li>)
+                       })
+                   }
+               </ul>
+           </nav>
+
+        </>
     );
 }

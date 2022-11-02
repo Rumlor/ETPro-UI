@@ -1,44 +1,48 @@
-nav {
-    background: rgba(0,0,0,0.9);
-    padding: 20px;
+.navbar{
+    height: 10vh;
+    background: sandybrown;
     display: flex;
-    justify-content: space-between;
-    color: #fff;
-    position: relative;
-    z-index: 99;
-}
-.logo {
-    font-weight: 600;
-    font-size: 25px;
-    color:tomato;
-}
-.logo font {
-    color: white;
-}
-.menu-list {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
-.menu-list li a {
-    text-decoration: none;
-    color: white;
-    font-weight: 300;
-    padding: 5px 10px;
-    margin-left: 20px;
-}
-.menu-list li:last-child a {
-    font-weight: 300;
-    padding: 5px 10px;
-    background-color: deepskyblue;
-    transition: all 0.5s ease-in-out;
-    margin-left: 20px;
-    border-radius: 2px;
-}
-.menu-list li a:hover {
-    background-color: white;
-    border-radius: 2px;
+.navbar-logo{
     color: black;
-    transition: all 0.5s ease-in-out;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 2rem;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar-logo-font {
+    color: white;
+    text-decoration:none;
+    font-size: 2rem;
+}
+
+.menu-items{
+    display: flex;
+    list-style: none;
+    width: 100vw;
+    text-align: center;
+    justify-content: flex-end;
+    margin-left: 15px;
+}
+.menu-item {
+    height: 10vh;
+    display: flex;
+    align-items: center;
+}
+.menu-item a {
+    color: black;
+    text-decoration: none;
+    font-size: 1.1rem;
+    margin-right: 2rem;
+    border-radius: 30px;
+}
+.menu-item a:hover {
+
+    color: white;
+    transition: 0.2s ease-in-out;
 }
