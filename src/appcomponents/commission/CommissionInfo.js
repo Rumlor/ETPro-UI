@@ -32,7 +32,9 @@ function CommissionInfo(props){
                 <Typography sx={{ width: '33%', flexShrink: 0 }}>
                     Komisyon
                 </Typography>
-                <Typography sx={{ color: 'text.secondary' ,margin:'0px 0px 0px 10px'}}>Fiyatlandırma</Typography>
+                <Typography sx={{ color: 'text.secondary' ,margin:'0px 0px 0px 10px'}}>
+                    {props.categories != null ? sortCategories(props.categories) : 'Kategorisiz Fiyat Bilgisi'}
+                </Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <Grid>

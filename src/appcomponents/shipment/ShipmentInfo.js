@@ -23,8 +23,8 @@ function ShipmentInfo(props){
                 setShipmentInfoExpanded(true)
         }}>
             <AccordionSummary   expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                    Fiyatlandırma
+                <Typography sx={{ width: '45%', flexShrink: 0 }}>
+                    {props.isVolumeBased ? 'Desi Bilgisi' : 'Barem Bilgisi'}
                 </Typography>
             </AccordionSummary>
             <AccordionDetails>
