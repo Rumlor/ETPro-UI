@@ -9,36 +9,56 @@ import {
     Typography
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CommissionInfo from "./CommissionInfo";
-import {useRef, useState} from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
+import {useEffect, useState} from "react";
 
 function CommissionInfoAccordion(props){
+    const setMarketPlace = props.setMarketPlace;
+    const index = props.index;
+
     const  initialCommission = {
         percent:null,
         isCategoryBasedPricing:false,
-        categoryInfos:[{
-            categoryName:''
-        }]
+        categoryInfos:{
+            categoryName:null
+        }
     };
-    const categoryTextBoxRef = useRef(null);
     const [commissionExpanded,setCommissionExpanded] = useState(false)
     const [deleteDialog,setDeleteDialog] = useState(false);
     const [categoryChecked,setCategoryChecked] = useState(false)
     const [commissionInfo,setCommissionInfo] = useState(initialCommission)
     function deleteCommission() {
-        const newArray =  props.commissionCounter.filter(i=>i !== props.index);
-        console.log('new array size'+newArray.length);
-        props.setCommissionCounter(newArray);
+        //implement
         setDeleteDialog(false);
     }
-
-    function addCategoryInfos() {
-        setCategoryChecked(!categoryChecked);
-
+    function updateMarketPlace() {
+        props.marketPlace.commissionAmounts[index] = commissionInfo;
+        props.setMarketPlace(props.marketPlace);
     }
+    function addCategoryInfos() {
+        if (!categoryChecked){
+            console.log('set category based to true')
+            setCommissionInfo({...commissionInfo,isCategoryBasedPricing:true});
+        } else {
+            setCommissionInfo({...commissionInfo,isCategoryBasedPricing:false});
+            console.log('set category based to false')
+        }
+        setCategoryChecked(!categoryChecked);
+    }
+    function setCategoryName(e) {
+        setCommissionInfo({...commissionInfo,'categoryInfos':{...commissionInfo.categoryInfos,[e.target.name]:e.target.value}});
+    }
+    function setCommissionPercent(e) {
+        setCommissionInfo({...commissionInfo,[e.target.name]:e.target.value});
+    }
+    updateMarketPlace();
+    console.log('category selected?'+categoryChecked);
+    console.log(commissionInfo);
+
+
 
     return(
-        <>
+        <div style={{width:'50vw'}}>
         <Accordion expanded={commissionExpanded}   color={'red'} onChange={()=>{
             if (commissionExpanded)
                 setCommissionExpanded(false)
@@ -48,10 +68,6 @@ function CommissionInfoAccordion(props){
             <AccordionSummary    expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
                 {
 
-                      (props.index % 2) === 0 ?
-                   <Typography  color={'red'} sx={{ width: '33%', flexShrink: 0 }}>
-                        Komisyon
-                    </Typography> :
                    <Typography   sx={{ width: '33%', flexShrink: 0 }}>
                     Komisyon
                     </Typography>
@@ -65,18 +81,18 @@ function CommissionInfoAccordion(props){
                     <TextField
                         name={'percent'}
                         label="Yüzde Komisyon"
-                        onChange={e=>setCommissionInfo({...commissionInfo,[e.target.name]:e.target.value})}
+                        onChange={setCommissionPercent}
                     />
                     <div className={"commission-form-category"} style={categoryChecked?{visibility:'visible'}:{visibility:'hidden'}}>
 
                         <TextField
-                            inputRef={categoryTextBoxRef}
                             name={'categoryName'}
-                            id="outlined-required"
+                            onChange={setCategoryName}
                             label="Kategori"
                         />
                     </div>
                     <FormControlLabel sx={{marginLeft:'50px'}} control={<Checkbox/>} onClick={addCategoryInfos} checked={categoryChecked} label="Kategori Bazlı" />
+                    <DeleteIcon sx={{marginTop:3}}  onClick={()=>setDeleteDialog(true)}/>
                 </div>
 
             </AccordionDetails>
@@ -97,7 +113,7 @@ function CommissionInfoAccordion(props){
                 </Button>
             </DialogActions>
         </Dialog>
-        </>
+        </div>
     );
 }
 export default CommissionInfoAccordion;
