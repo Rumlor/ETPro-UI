@@ -19,32 +19,20 @@ import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
 
 export default function MarketPlaceAdd(){
 
-    const [marketPlace,setMarketPlace] = useState({
-        platformName:'',
-        commissionAmounts: [
-            {
-            percent:0,
-            categoryInfos: {},
-            isCategoryBasedPricing:null
-            }
-        ],
-        shipmentAmounts: [
+    const initial = {
+        platformName:null,
+        commissionAmounts: [],
+        shipmentAmounts: []
+    };
+    const [marketPlace,setMarketPlace] = useState(initial);
 
-            {
-                "amount": 0,
-                "scaleInfo": {},
-                "volumeInfo": {},
-                "isVolumeBasedPricing": null
-            }
-
-        ]
-    });
     const [commissionCounter,setCommissionCounter] = useState(0);
     const [shipmentCounter,setShipmentCounter] = useState(0);
     const addCommission = ()=>{setCommissionCounter(commissionCounter+1)};
     const addShipment = ()=>{setShipmentCounter(shipmentCounter+1)};
-    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);}
-    console.log('size'+commissionCounter.length)
+    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial);}
+    console.log('marketplace');
+    console.log(marketPlace);
     return (
 
             <Box  component="form"
@@ -58,8 +46,9 @@ export default function MarketPlaceAdd(){
                     <TextField
                         required
                         hidden
-                        id="outlined-required"
+                        name={"platformName"}
                         label="Platform adı"
+                        onChange={e=>setMarketPlace({...marketPlace,[e.target.name]:e.target.value})}
                     />
                 </div>
                     <br/>
@@ -70,20 +59,26 @@ export default function MarketPlaceAdd(){
                     </div>
 
                 <div className={"commission-shipment-tabs"} style={{marginTop:'15px'}}>
-                    <>
+                    <div className={"comms"} style={{float:"left"}}>
                         {
-                            Array(commissionCounter).fill().map(i=> (
-                                <CommissionInfoAccordion/>
+                            Array(commissionCounter).fill().map((i,index)=> (
+                                <CommissionInfoAccordion
+                                    index = {index}
+                                    marketPlace = {marketPlace}
+                                    setMarketPlace = {setMarketPlace}/>
                             ))
                         }
-                    </>
-                    <>
+                    </div>
+                    <div className={"shipments"} style={{float:'right'}}>
                         {
-                            Array(shipmentCounter).fill().map(i=> (
-                                <ShipmentInfoAccordion/>
+                            Array(shipmentCounter).fill().map((i,index)=> (
+                                <ShipmentInfoAccordion
+                                    index = {index}
+                                    marketPlace = {marketPlace}
+                                    setMarketPlace = {setMarketPlace}/>
                             ))
                         }
-                    </>
+                    </div>
                 </div>
 
             </Box>
