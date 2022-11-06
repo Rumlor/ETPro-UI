@@ -1,6 +1,6 @@
 import {
-    Alert,
-    Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+    Alert, Backdrop,
+    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
     TextField,
 } from "@mui/material";
 import {useRef, useState} from "react";
@@ -26,6 +26,9 @@ export default function MarketPlaceAdd(){
     const[showApiFail,setShowApiFail] = useState(false)
     //failed app operation message
     const [showFailMessage,setShowFailMessage] = useState("")
+    // loading screen for add api call
+    const [showLoadingScreen,setShowLoadingScreen] = useState(false);
+
     const [isFailedValidation,setIsFailedValidation] = useState(false)
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
@@ -36,9 +39,14 @@ export default function MarketPlaceAdd(){
     const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial);platformNameRef.current.value = ''}
 
 function onApiFail(response){
+    setShowLoadingScreen(false);
     setShowApiFail(true)
     console.log(response)
     setShowFailMessage(response.errorMessage)
+}
+function onApiSuccess(response){
+   setShowLoadingScreen(false);
+   setShowApiSuccess(true)
 }
 
 function validateState() {
@@ -54,10 +62,17 @@ function validateState() {
     else if (shipmentInfos == null || shipmentInfos.length === 0) {
         result.result = false;
         result.message = 'Lütfen en az bir adet kargo bilgisi giriniz.'
+    } else if (shipmentInfos.findIndex(shipment=>shipment.amount == null) !==-1 ){
+        result.result = false;
+        result.message = 'Lütfen kargo tutarlarınızı kontrol ediniz.'
     } else if (commissionInfos == null || commissionInfos.length === 0) {
         result.result = false;
         result.message = 'Lütfen en az bir adet komisyon bilgisi giriniz.'
-    } else if (commissionInfos.findIndex(element=>element.isCategoryBasedPricing && (element.categoryInfos === null || element.categoryInfos.categoryName === null))){
+    } else if (commissionInfos.findIndex(commission=>commission.percent == null) !== -1){
+        result.result = false;
+        result.message = 'Lütfen komisyon yüzdeleriniz kontrol ediniz.'
+    }
+    else if (commissionInfos.findIndex(element=>(element.isCategoryBasedPricing) && (element.categoryInfos === null || element.categoryInfos[0].categoryName === null)) !== -1){
         result.result = false
         result.message = 'Lütfen kategorili komisyonların kategori bilgisini girdiğinizden emin olun.'
     }
@@ -65,6 +80,7 @@ function validateState() {
 }
 
 function saveMarketPlaceAPI() {
+    setShowLoadingScreen(true)
     const mutatedMarketPlace = {...marketPlace}
     if (mutatedMarketPlace.commissionAmounts.findIndex(x=>Array.isArray(x.categoryInfos)) === -1){
         console.log('====MUTATING=====')
@@ -77,13 +93,13 @@ function saveMarketPlaceAPI() {
     }
        const validationResult =  validateState();
     if (validationResult.result) {
-        POST_MARKETPLACE(marketPlace, setShowApiSuccess, onApiFail)
+        POST_MARKETPLACE(marketPlace,onApiSuccess, onApiFail)
         setIsSaveDialogOpen(false)
     } else {
         setShowApiFail(true)
         setIsSaveDialogOpen(false)
         setShowFailMessage(validationResult.message)
-
+        setShowLoadingScreen(false);
     }
 }
 
@@ -119,7 +135,13 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                             </Alert>
                     }
                 </div>
-
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={showLoadingScreen}
+                    onClick={()=>setShowLoadingScreen(false)}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
                 <Box  component="form"
                       sx={{
                           '& .MuiTextField-root': { m: 1, width: '25ch' }
