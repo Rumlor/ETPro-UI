@@ -2,7 +2,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary, Alert,
-    Checkbox,
+    Checkbox, Dialog,
     FormControlLabel,
     TextField,
     Typography
@@ -22,6 +22,8 @@ function ShipmentInfoAccordion(props){
         scaleInfo:{}
     }
     const [showSuccessMessage,setShowSuccessMessage] = useState(false)
+    const [isSaveEvent,setIsSaveEvent] = useState(false)
+    const [isUpdateEvent,setIsUpdateEvent] = useState(false)
     const [shipmentInfoExpanded,setShipmentInfoExpanded] = useState(false);
     const [shipmentInfo,setShipmentInfo] = useState(initialState)
     const[volumeBased,setVolumeBased] = useState(false);
@@ -41,18 +43,21 @@ function ShipmentInfoAccordion(props){
 
     console.log('shipment '+props.index)
     console.log(shipmentInfo)
-
+    console.log('success message'+showSuccessMessage)
     function saveEvent() {
 
-
+        setIsSaveEvent(false)
+        setIsUpdateEvent(false)
         if (props.marketPlace.shipmentAmounts.findIndex(element=>element.index === props.index) === -1 ){
             console.log('shipment save event!!')
+            setIsSaveEvent(true)
             const newShipmentsArray = [...props.marketPlace.shipmentAmounts]
             newShipmentsArray.push(shipmentInfo)
             props.setMarketPlace({...props.marketPlace,shipmentAmounts:newShipmentsArray})
         }
         else {
             console.log('shipment update event!!')
+            setIsUpdateEvent(true)
             const newShipmentsArray = [...props.marketPlace.shipmentAmounts]
             const newShipmentFromArray = {...props.marketPlace.shipmentAmounts[props.index]}
             newShipmentFromArray.amount = shipmentInfo.amount;
@@ -67,7 +72,6 @@ function ShipmentInfoAccordion(props){
 
     return (
     <div style={{width:'50vw'}}>
-        <Alert sx={showSuccessMessage?{visibility:'visible'}:{visibility:'none'}}   severity="success">{shipmentInfo.index + 'numaralı komisyon kaydedildi !'}</Alert>
         <Accordion expanded={shipmentInfoExpanded} onChange={()=>{
             if (shipmentInfoExpanded)
                 setShipmentInfoExpanded(false)
@@ -81,6 +85,13 @@ function ShipmentInfoAccordion(props){
                 <Typography sx={{ color: 'text.secondary' ,margin:'0px 0px 0px 10px'}}>Kargo Bilgileri</Typography>
             </AccordionSummary>
             <AccordionDetails>
+                <>
+                    {
+                        showSuccessMessage? <Alert  severity="success">{(shipmentInfo.index+1) + ' numaralı kargo '+  (isSaveEvent? 'kaydedildi':'güncellendi')}</Alert>
+                            :<></>
+                    }
+
+                </>
                 {
                     <div className={"shipment-form"} >
                         <SaveIcon onClick={saveEvent}/>
