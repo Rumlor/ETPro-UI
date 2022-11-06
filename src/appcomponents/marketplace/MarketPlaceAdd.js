@@ -26,6 +26,8 @@ export default function MarketPlaceAdd(){
         commissionAmounts: [],
         shipmentAmounts: []
     };
+    const[showApiSuccess,setShowApiSuccess] = useState(false)
+    const[showApiFail,setShowApiFail] = useState(false)
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
     const [commissionCounter,setCommissionCounter] = useState(0);
@@ -36,35 +38,7 @@ export default function MarketPlaceAdd(){
     console.log('marketplace');
     console.log(marketPlace);
 
-    function onSuccess(response) {
-        setIsSaveDialogOpen(false)
-        return (
-            <Alert
-                action={
-                    <Button color="inherit" size="small">
-                        Kapat
-                    </Button>
-                }
-            >
-                {'Pazar yeri Başarıyla Kaydedildi.'}
-            </Alert>
-        )
-    }
 
-    function onFail(reason) {
-        setIsSaveDialogOpen(false)
-        return (
-            <Alert severity={'warning'}
-                action={
-                    <Button color="inherit" size="small">
-                        Kapat
-                    </Button>
-                }
-            >
-                {'Hata!'+reason}
-            </Alert>
-        )
-    }
 
     function saveMarketPlaceAPI() {
         const mutatedMarketPlace = {...marketPlace}
@@ -77,11 +51,38 @@ export default function MarketPlaceAdd(){
             })
             setMarketPlace(mutatedMarketPlace)
         }
-        POST_MARKETPLACE(marketPlace,onSuccess,onFail)
+        POST_MARKETPLACE(marketPlace,setShowApiSuccess,setShowApiFail)
+        setIsSaveDialogOpen(false)
     }
-
+    console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
     return (
             <div>
+                <div style={(showApiSuccess || showApiFail) ? {visibility:'visible'}:{visibility: 'hidden'}}>
+                    {
+
+                    showApiSuccess&&!showApiFail?
+                                <Alert
+                                action={
+                                    <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
+                                        Kapat
+                                    </Button>
+                                }
+                            >
+                                Pazar yeri başarıyla kaydedildi!
+                            </Alert>
+                        :
+                            <Alert color={"error"}
+                                action={
+                                    <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
+                                        Kapat
+                                    </Button>
+                                }
+                            >
+                                Pazar yeri kaydedilirken hatayla karşılaşıldı.
+                            </Alert>
+                    }
+                </div>
+
                 <Box  component="form"
                       sx={{
                           '& .MuiTextField-root': { m: 1, width: '25ch' }
@@ -146,6 +147,7 @@ export default function MarketPlaceAdd(){
                     </DialogActions>
                 </Dialog>
             </div>
+
 
     );
 }
