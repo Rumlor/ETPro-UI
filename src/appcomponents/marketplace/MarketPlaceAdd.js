@@ -1,6 +1,6 @@
 import {
     Alert, Backdrop,
-    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fade,
     TextField,
 } from "@mui/material";
 import {useRef, useState} from "react";
@@ -63,7 +63,14 @@ function validateState() {
     } else if (shipmentInfos.findIndex(shipment=>shipment.amount == null) !==-1 ){
         result.result = false;
         result.message = 'Lütfen kargo tutarlarınızı kontrol ediniz.'
-    } else if (commissionInfos == null || commissionInfos.length === 0) {
+    } else if (shipmentInfos.findIndex(shipment=>(shipment.isVolumeBasedPricing && (shipment.volumeInfo == null || shipment.volumeInfo.upperBound == null) ))!== -1){
+        result.result = false;
+        result.message = 'Lütfen desi bazlı kargoların desi bilgilerini kontrol ediniz.'
+    } else if (shipmentInfos.findIndex(shipment=>(!shipment.isVolumeBasedPricing && (shipment.scaleInfo == null || shipment.scaleInfo.upperBound == null) ))!== -1){
+        result.result = false;
+        result.message = 'Lütfen barem bazlı kargoların barem bilgilerini kontrol ediniz.'
+    }
+    else if (commissionInfos == null || commissionInfos.length === 0) {
         result.result = false;
         result.message = 'Lütfen en az bir adet komisyon bilgisi giriniz.'
     } else if (commissionInfos.findIndex(commission=>commission.percent == null) !== -1){
@@ -111,26 +118,30 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                     {
 
                     showApiSuccess&&!showApiFail?
+                            <Fade in={showApiSuccess}  addEndListener={()=>setTimeout(()=>setShowApiSuccess(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}  >
+                                    <Alert
 
-                                <Alert
-                                action={
-                                    <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                        Kapat
-                                    </Button>
-                                }
-                            >
-                                Pazar yeri başarıyla kaydedildi!
-                            </Alert>
+                                    action={
+                                        <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
+                                            Kapat
+                                        </Button>
+                                    }
+                                >
+                                    Pazar yeri başarıyla kaydedildi!
+                                </Alert>
+                            </Fade>
                         :
-                            <Alert color={"error"}
-                                action={
-                                    <Button color="inherit" size="medium" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                        Kapat
-                                    </Button>
-                                }
-                            >
-                                {'Hata: '+showFailMessage}
-                            </Alert>
+                           <Fade  in={showApiFail}  addEndListener={()=>setTimeout(()=>setShowApiFail(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}   >
+                                <Alert color={"error"}
+                                    action={
+                                        <Button color="inherit" size="medium" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
+                                            Kapat
+                                        </Button>
+                                    }
+                                >
+                                    {'Hata: '+showFailMessage}
+                                </Alert>
+                           </Fade>
                     }
                 </div>
                 <Backdrop
