@@ -81,8 +81,9 @@ if (validationResult.result) {
     setIsSaveDialogOpen(false)
 } else {
     setShowApiFail(true)
-    setShowFailMessage(validationResult.message)
     setIsSaveDialogOpen(false)
+    setShowFailMessage(validationResult.message)
+
 }
 }
 console.log('marketplace');
