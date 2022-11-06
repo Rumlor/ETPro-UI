@@ -5,15 +5,16 @@ import {API} from "./ApiList.js"
        const reqOptions  = prepareRequestOptions(API[0].apis[0].httpMethod,{'Content-Type': 'application/json'},body)
 
          fetch(API[0].origin.concat(API[0].apis[0].url),reqOptions)
-             .catch(() => onFail(true))
+             .then(response=>response.json())
              .then((response)=> {
                  if (response.ok){
                     onSuccess(true)
                  } else {
-                     onFail(true)
+                     onFail(response)
                  }
              })
-             .then(response=>response.json())
+             .catch(reason => onFail(reason))
+
 
 
     }

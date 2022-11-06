@@ -28,6 +28,7 @@ export default function MarketPlaceAdd(){
     };
     const[showApiSuccess,setShowApiSuccess] = useState(false)
     const[showApiFail,setShowApiFail] = useState(false)
+    const [showApiFailMessage,setShowApiFailMessage] = useState("")
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
     const [commissionCounter,setCommissionCounter] = useState(0);
@@ -38,7 +39,11 @@ export default function MarketPlaceAdd(){
     console.log('marketplace');
     console.log(marketPlace);
 
-
+function onApiFail(response){
+    setShowApiFail(true)
+    console.log(response)
+    setShowApiFailMessage(response.errorMessage)
+}
 
     function saveMarketPlaceAPI() {
         const mutatedMarketPlace = {...marketPlace}
@@ -51,7 +56,7 @@ export default function MarketPlaceAdd(){
             })
             setMarketPlace(mutatedMarketPlace)
         }
-        POST_MARKETPLACE(marketPlace,setShowApiSuccess,setShowApiFail)
+        POST_MARKETPLACE(marketPlace,setShowApiSuccess,onApiFail)
         setIsSaveDialogOpen(false)
     }
     console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
@@ -61,6 +66,7 @@ export default function MarketPlaceAdd(){
                     {
 
                     showApiSuccess&&!showApiFail?
+
                                 <Alert
                                 action={
                                     <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
@@ -73,12 +79,12 @@ export default function MarketPlaceAdd(){
                         :
                             <Alert color={"error"}
                                 action={
-                                    <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
+                                    <Button color="inherit" size="medium" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
                                         Kapat
                                     </Button>
                                 }
                             >
-                                Pazar yeri kaydedilirken hatayla karşılaşıldı.
+                                {'Hata: '+showApiFailMessage}
                             </Alert>
                     }
                 </div>
