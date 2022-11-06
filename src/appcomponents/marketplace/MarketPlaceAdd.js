@@ -65,27 +65,28 @@ function validateState() {
 }
 
 function saveMarketPlaceAPI() {
-const mutatedMarketPlace = {...marketPlace}
-if (mutatedMarketPlace.commissionAmounts.findIndex(x=>Array.isArray(x.categoryInfos)) === -1){
-    console.log('====MUTATING=====')
-    mutatedMarketPlace.commissionAmounts.forEach(element=>{
-        if (element.categoryInfos != null) {
-            element.categoryInfos = [element.categoryInfos]
-        }
-    })
-    setMarketPlace(mutatedMarketPlace)
-}
-   const validationResult =  validateState();
-if (validationResult.result) {
-    POST_MARKETPLACE(marketPlace, setShowApiSuccess, onApiFail)
-    setIsSaveDialogOpen(false)
-} else {
-    setShowApiFail(true)
-    setIsSaveDialogOpen(false)
-    setShowFailMessage(validationResult.message)
+    const mutatedMarketPlace = {...marketPlace}
+    if (mutatedMarketPlace.commissionAmounts.findIndex(x=>Array.isArray(x.categoryInfos)) === -1){
+        console.log('====MUTATING=====')
+        mutatedMarketPlace.commissionAmounts.forEach(element=>{
+            if (element.categoryInfos != null) {
+                element.categoryInfos = [element.categoryInfos]
+            }
+        })
+        setMarketPlace(mutatedMarketPlace)
+    }
+       const validationResult =  validateState();
+    if (validationResult.result) {
+        POST_MARKETPLACE(marketPlace, setShowApiSuccess, onApiFail)
+        setIsSaveDialogOpen(false)
+    } else {
+        setShowApiFail(true)
+        setIsSaveDialogOpen(false)
+        setShowFailMessage(validationResult.message)
 
+    }
 }
-}
+
 console.log('marketplace');
 console.log(marketPlace);
 console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
