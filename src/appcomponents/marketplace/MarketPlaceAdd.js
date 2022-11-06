@@ -28,8 +28,6 @@ export default function MarketPlaceAdd(){
     const [showFailMessage,setShowFailMessage] = useState("")
     // loading screen for add api call
     const [showLoadingScreen,setShowLoadingScreen] = useState(false);
-
-    const [isFailedValidation,setIsFailedValidation] = useState(false)
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
     const [commissionCounter,setCommissionCounter] = useState(0);
@@ -138,7 +136,6 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={showLoadingScreen}
-                    onClick={()=>setShowLoadingScreen(false)}
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>
