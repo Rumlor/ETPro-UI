@@ -27,6 +27,7 @@ export default function MarketPlaceAdd(){
     //failed app operation message
     const [showFailMessage,setShowFailMessage] = useState("")
     // loading screen for add api call
+    const [indexArrayForDeleted,setIndexArrayForDeleted] = useState([])
     const [showLoadingScreen,setShowLoadingScreen] = useState(false);
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
@@ -178,10 +179,13 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                         <div className={"comms"} style={{float:"left"}}>
                             {
                                 Array(commissionCounter).fill().map((i,index)=> (
+                                    indexArrayForDeleted.findIndex(element=>element === index) === -1 ?
                                     <CommissionInfoAccordion
                                         index = {index}
+                                        setIndexArray={setIndexArrayForDeleted}
+                                        indexArray={indexArrayForDeleted}
                                         marketPlace = {marketPlace}
-                                        setMarketPlace = {setMarketPlace}/>
+                                        setMarketPlace = {setMarketPlace}/> : <></>
                                 ))
                             }
                         </div>

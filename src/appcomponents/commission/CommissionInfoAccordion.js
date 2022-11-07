@@ -2,15 +2,13 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary, Alert,
-    Button, Checkbox,
-    Dialog, DialogActions, DialogContent,
-    DialogContentText,
-    DialogTitle, FormControlLabel, TextField,
+     Checkbox,
+  FormControlLabel, TextField,
     Typography
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import SaveIcon from "@mui/icons-material/Save";
 
 function CommissionInfoAccordion(props){
@@ -26,9 +24,7 @@ function CommissionInfoAccordion(props){
         }
     };
     const [isSaveEvent,setIsSaveEvent] = useState(false)
-    const [isUpdateEvent,setIsUpdateEvent] = useState(false)
     const [commissionExpanded,setCommissionExpanded] = useState(false)
-    const [deleteDialog,setDeleteDialog] = useState(false);
     const [categoryChecked,setCategoryChecked] = useState(false)
     const [commissionInfo,setCommissionInfo] = useState(initialCommission)
     const [showSuccessMessage,setShowSuccessMessage] = useState(false)
@@ -49,14 +45,9 @@ function CommissionInfoAccordion(props){
         setCommissionInfo({...commissionInfo,[e.target.name]:e.target.value});
 
     }
-
-    console.log('category selected?'+categoryChecked);
-    console.log(commissionInfo);
-
     function saveEvent() {
 
         setIsSaveEvent(false)
-        setIsUpdateEvent(false)
         if(props.marketPlace.commissionAmounts.findIndex(x=>x.index === props.index) === -1){
             console.log('saving commission')
             const newArray = [...props.marketPlace.commissionAmounts]
@@ -74,11 +65,28 @@ function CommissionInfoAccordion(props){
 
             newArray[props.index] = updatedElement
             props.setMarketPlace({...props.marketPlace,commissionAmounts:newArray})
-            setIsUpdateEvent(true)
+
         }
         setShowSuccessMessage(true)
     }
-
+    function deleteEvent() {
+        const newArray = [...props.indexArray]
+            if (newArray.findIndex(element=>element === index) === -1){
+                newArray.push(index)
+                props.setIndexArray(newArray)
+        }
+       //delete commission from marketplace also
+        //if commission not added to marketplace yet
+        if(props.marketPlace.commissionAmounts.findIndex(x=>x.index === props.index) === -1){
+            // do nothing
+        } else {
+            let newArray = [...props.marketPlace.commissionAmounts]
+            newArray = newArray.filter(x=>x.index !== index)
+            props.setMarketPlace({...props.marketPlace,commissionAmounts:newArray})
+        }
+    }
+    console.log('category selected?'+categoryChecked);
+    console.log(commissionInfo);
     return(
         <div style={{width:'50vw'}}>
         <Accordion expanded={commissionExpanded}   color={'red'} onChange={()=>{
@@ -101,12 +109,13 @@ function CommissionInfoAccordion(props){
             <AccordionDetails>
                 <>
                     {
-                        showSuccessMessage? <Alert  severity="success">{(commissionInfo.index+1) + ' numaralı komisyon '+  (isSaveEvent? 'kaydedildi':'güncellendi')}</Alert>
+                        showSuccessMessage? <Alert  severity="success">{'Komisyon '+  (isSaveEvent? 'kaydedildi':'güncellendi')}</Alert>
                             :<></>
                     }
 
                 </>
                 <SaveIcon onClick={saveEvent}/>
+                <DeleteIcon onClick={deleteEvent} sx={{marginLeft:'25px'}}/>
                 <div className={"commission-form"} style={{display:"flex"}}>
                     <TextField
                         name={'percent'}
