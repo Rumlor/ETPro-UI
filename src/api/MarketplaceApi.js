@@ -8,7 +8,7 @@ import {API} from "./ApiList.js"
              .then(response=>response.json())
              .then((response)=> {
                  if (response.ok){
-                    onSuccess(true)
+                    onSuccess(response)
                  } else {
                      onFail(response)
                  }

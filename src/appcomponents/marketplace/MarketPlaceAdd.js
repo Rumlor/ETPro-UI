@@ -1,94 +1,158 @@
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary, Alert,
-    Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-    Paper,
-    Tab,
-    Tabs,
+    Alert, Backdrop,
+    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fade,
     TextField,
-    Typography
 } from "@mui/material";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import "./MarketPlaceAdd.css";
 import ShipmentInfoAccordion from "../shipment/ShipmentInfoAccordion";
 import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
 
-import MarketplaceApi, {POST_MARKETPLACE} from "../../api/MarketplaceApi";
+import  {POST_MARKETPLACE} from "../../api/MarketplaceApi";
 
 
 
 
 export default function MarketPlaceAdd(){
-
+    const platformNameRef = useRef();
     const initial = {
         platformName:null,
         commissionAmounts: [],
         shipmentAmounts: []
     };
+    // successful add operation alert
     const[showApiSuccess,setShowApiSuccess] = useState(false)
+    // failed add operation alert
     const[showApiFail,setShowApiFail] = useState(false)
-    const [showApiFailMessage,setShowApiFailMessage] = useState("")
+    //failed app operation message
+    const [showFailMessage,setShowFailMessage] = useState("")
+    // loading screen for add api call
+    const [indexArrayForDeleted,setIndexArrayForDeleted] = useState([])
+    const [showLoadingScreen,setShowLoadingScreen] = useState(false);
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
     const [commissionCounter,setCommissionCounter] = useState(0);
     const [shipmentCounter,setShipmentCounter] = useState(0);
     const addCommission = ()=>{setCommissionCounter(commissionCounter+1)};
     const addShipment = ()=>{setShipmentCounter(shipmentCounter+1)};
-    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial);}
-    console.log('marketplace');
-    console.log(marketPlace);
+    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial);platformNameRef.current.value = ''}
 
 function onApiFail(response){
+    setShowLoadingScreen(false);
     setShowApiFail(true)
     console.log(response)
-    setShowApiFailMessage(response.errorMessage)
+    setShowFailMessage(response.errorMessage)
+}
+function onApiSuccess(response){
+        //clear previous state from previous api call
+   setShowApiFail(false)
+   setShowLoadingScreen(false);
+   setShowApiSuccess(true)
 }
 
-    function saveMarketPlaceAPI() {
-        const mutatedMarketPlace = {...marketPlace}
-        if (mutatedMarketPlace.commissionAmounts.findIndex(x=>Array.isArray(x.categoryInfos)) === -1){
-            console.log('====MUTATING=====')
-            mutatedMarketPlace.commissionAmounts.forEach(element=>{
-                if (element.categoryInfos != null) {
-                    element.categoryInfos = [element.categoryInfos]
-                }
-            })
-            setMarketPlace(mutatedMarketPlace)
-        }
-        POST_MARKETPLACE(marketPlace,setShowApiSuccess,onApiFail)
-        setIsSaveDialogOpen(false)
+function validateState() {
+    const  platformName  = marketPlace.platformName;
+    const shipmentInfos = marketPlace.shipmentAmounts;
+    const commissionInfos = marketPlace.commissionAmounts;
+    const result = {result:true,message:''}
+
+    if (platformName == null || platformName === ''){
+        result.result = false
+        result.message = 'Lütfen Pazar yeri adını giriniz.'
     }
-    console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
+    else if (shipmentInfos == null || shipmentInfos.length === 0) {
+        result.result = false;
+        result.message = 'Lütfen en az bir adet kargo bilgisi giriniz.'
+    } else if (shipmentInfos.findIndex(shipment=>shipment.amount == null) !==-1 ){
+        result.result = false;
+        result.message = 'Lütfen kargo tutarlarınızı kontrol ediniz.'
+    } else if (shipmentInfos.findIndex(shipment=>(shipment.isVolumeBasedPricing && (shipment.volumeInfo == null || shipment.volumeInfo.upperBound == null) ))!== -1){
+        result.result = false;
+        result.message = 'Lütfen desi bazlı kargoların desi bilgilerini kontrol ediniz.'
+    } else if (shipmentInfos.findIndex(shipment=>(!shipment.isVolumeBasedPricing && (shipment.scaleInfo == null || shipment.scaleInfo.upperBound == null) ))!== -1){
+        result.result = false;
+        result.message = 'Lütfen barem bazlı kargoların barem bilgilerini kontrol ediniz.'
+    }
+    else if (commissionInfos == null || commissionInfos.length === 0) {
+        result.result = false;
+        result.message = 'Lütfen en az bir adet komisyon bilgisi giriniz.'
+    } else if (commissionInfos.findIndex(commission=>commission.percent == null) !== -1){
+        result.result = false;
+        result.message = 'Lütfen komisyon yüzdeleriniz kontrol ediniz.'
+    }
+    else if (commissionInfos.findIndex(element=>(element.isCategoryBasedPricing) && (element.categoryInfos === null || element.categoryInfos[0].categoryName === null)) !== -1){
+        result.result = false
+        result.message = 'Lütfen kategorili komisyonların kategori bilgisini girdiğinizden emin olun.'
+    }
+    return result;
+}
+
+function saveMarketPlaceAPI() {
+    setShowLoadingScreen(true)
+    const mutatedMarketPlace = {...marketPlace}
+    if (mutatedMarketPlace.commissionAmounts.findIndex(x=>Array.isArray(x.categoryInfos)) === -1){
+        console.log('====MUTATING=====')
+        mutatedMarketPlace.commissionAmounts.forEach(element=>{
+            if (element.categoryInfos != null) {
+                element.categoryInfos = [element.categoryInfos]
+            }
+        })
+        setMarketPlace(mutatedMarketPlace)
+    }
+       const validationResult =  validateState();
+    if (validationResult.result) {
+        POST_MARKETPLACE(marketPlace,onApiSuccess, onApiFail)
+        setIsSaveDialogOpen(false)
+    } else {
+        setShowApiFail(true)
+        setIsSaveDialogOpen(false)
+        setShowFailMessage(validationResult.message)
+        setShowLoadingScreen(false);
+    }
+}
+
+console.log('marketplace');
+console.log(marketPlace);
+console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
+
     return (
             <div>
                 <div style={(showApiSuccess || showApiFail) ? {visibility:'visible'}:{visibility: 'hidden'}}>
                     {
 
                     showApiSuccess&&!showApiFail?
+                            <Fade in={showApiSuccess}  addEndListener={()=>setTimeout(()=>setShowApiSuccess(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}  >
+                                    <Alert
 
-                                <Alert
-                                action={
-                                    <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                        Kapat
-                                    </Button>
-                                }
-                            >
-                                Pazar yeri başarıyla kaydedildi!
-                            </Alert>
+                                    action={
+                                        <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
+                                            Kapat
+                                        </Button>
+                                    }
+                                >
+                                    Pazar yeri başarıyla kaydedildi!
+                                </Alert>
+                            </Fade>
                         :
-                            <Alert color={"error"}
-                                action={
-                                    <Button color="inherit" size="medium" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                        Kapat
-                                    </Button>
-                                }
-                            >
-                                {'Hata: '+showApiFailMessage}
-                            </Alert>
+                           <Fade  in={showApiFail}  addEndListener={()=>setTimeout(()=>setShowApiFail(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}   >
+                                <Alert color={"error"}
+                                    action={
+                                        <Button color="inherit" size="medium" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
+                                            Kapat
+                                        </Button>
+                                    }
+                                >
+                                    {'Hata: '+showFailMessage}
+                                </Alert>
+                           </Fade>
                     }
                 </div>
-
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={showLoadingScreen}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
                 <Box  component="form"
                       sx={{
                           '& .MuiTextField-root': { m: 1, width: '25ch' }
@@ -99,7 +163,7 @@ function onApiFail(response){
                     <div className={'platformName'} style={{display:'flex',justifyContent:'center'}}>
                         <TextField
                             required
-                            hidden
+                            inputRef={platformNameRef}
                             name={"platformName"}
                             label="Platform adı"
                             onChange={e=>setMarketPlace({...marketPlace,[e.target.name]:e.target.value})}
@@ -117,10 +181,13 @@ function onApiFail(response){
                         <div className={"comms"} style={{float:"left"}}>
                             {
                                 Array(commissionCounter).fill().map((i,index)=> (
+                                    indexArrayForDeleted.findIndex(element=>element === index) === -1 ?
                                     <CommissionInfoAccordion
                                         index = {index}
+                                        setIndexArray={setIndexArrayForDeleted}
+                                        indexArray={indexArrayForDeleted}
                                         marketPlace = {marketPlace}
-                                        setMarketPlace = {setMarketPlace}/>
+                                        setMarketPlace = {setMarketPlace}/> : <></>
                                 ))
                             }
                         </div>
