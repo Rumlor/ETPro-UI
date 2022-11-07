@@ -44,6 +44,8 @@ function onApiFail(response){
     setShowFailMessage(response.errorMessage)
 }
 function onApiSuccess(response){
+        //clear previous state from previous api call
+   setShowApiFail(false)
    setShowLoadingScreen(false);
    setShowApiSuccess(true)
 }
