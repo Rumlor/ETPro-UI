@@ -2,7 +2,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary, Alert,
-    Checkbox, Dialog,
+    Checkbox,
     FormControlLabel,
     TextField,
     Typography
@@ -11,6 +11,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import {useState} from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 
 function ShipmentInfoAccordion(props){
@@ -47,7 +48,6 @@ function ShipmentInfoAccordion(props){
     function saveEvent() {
 
         setIsSaveEvent(false)
-        setIsUpdateEvent(false)
         if (props.marketPlace.shipmentAmounts.findIndex(element=>element.index === props.index) === -1 ){
             console.log('shipment save event!!')
             setIsSaveEvent(true)
@@ -57,7 +57,6 @@ function ShipmentInfoAccordion(props){
         }
         else {
             console.log('shipment update event!!')
-            setIsUpdateEvent(true)
             const newShipmentsArray = [...props.marketPlace.shipmentAmounts]
             const newShipmentFromArray = {...props.marketPlace.shipmentAmounts[props.index]}
             newShipmentFromArray.amount = shipmentInfo.amount;
@@ -68,6 +67,23 @@ function ShipmentInfoAccordion(props){
             props.setMarketPlace({...props.marketPlace,shipmentAmounts:newShipmentsArray})
         }
         setShowSuccessMessage(true);
+    }
+
+    function deleteEvent() {
+        //add shipment to delete array
+        const newArray = [...props.indexArray];
+        newArray.push(props.index)
+        props.setIndexArray(newArray)
+
+        //delete shipment from marketplace
+
+        if (props.marketPlace.shipmentAmounts.findIndex(element=>element.index === props.index) === -1){
+            //do nothing. no record found for this shipment
+        } else {
+            let newArray = [...props.marketPlace.shipmentAmounts]
+            newArray = newArray.filter(element=> element.index !== props.index)
+            props.setMarketPlace({...props.marketPlace,shipmentAmounts: newArray})
+        }
     }
 
     return (
@@ -87,7 +103,7 @@ function ShipmentInfoAccordion(props){
             <AccordionDetails>
                 <>
                     {
-                        showSuccessMessage? <Alert  severity="success">{(shipmentInfo.index+1) + ' numaralı kargo '+  (isSaveEvent? 'kaydedildi':'güncellendi')}</Alert>
+                        showSuccessMessage? <Alert  severity="success">{'Kargo bilgisi '+  (isSaveEvent? 'kaydedildi':'güncellendi')}</Alert>
                             :<></>
                     }
 
@@ -95,6 +111,7 @@ function ShipmentInfoAccordion(props){
                 {
                     <div className={"shipment-form"} >
                         <SaveIcon onClick={saveEvent}/>
+                        <DeleteIcon onClick={deleteEvent} sx={{marginLeft:'25px'}}/>
                             <div className={'amount-checkbox'} style={{display:'flex'}}>
                                     <TextField
                                         name={'amount'}

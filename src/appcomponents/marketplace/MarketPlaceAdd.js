@@ -28,7 +28,8 @@ export default function MarketPlaceAdd(){
     //failed app operation message
     const [showFailMessage,setShowFailMessage] = useState("")
     // loading screen for add api call
-    const [indexArrayForDeleted,setIndexArrayForDeleted] = useState([])
+    const [commissionIndexArrayForDeleted,setCommissionIndexArrayForDeleted] = useState([])
+    const [shipmentIndexArrayForDeleted,setShipmentIndexArrayForDeleted] = useState([])
     const [showLoadingScreen,setShowLoadingScreen] = useState(false);
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
@@ -36,12 +37,16 @@ export default function MarketPlaceAdd(){
     const [shipmentCounter,setShipmentCounter] = useState(0);
     const addCommission = ()=>{setCommissionCounter(commissionCounter+1)};
     const addShipment = ()=>{setShipmentCounter(shipmentCounter+1)};
-    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial);platformNameRef.current.value = ''}
+    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial); setCommissionIndexArrayForDeleted([]);setShipmentIndexArrayForDeleted([]); platformNameRef.current.value = ''}
 
 function onApiFail(response){
     setShowLoadingScreen(false);
     setShowApiFail(true)
     console.log(response)
+    if (response.errorMessage === undefined)
+    {
+        response.errorMessage = 'Server Bağlantısı sağlanamadı. Lütfen daha sonra tekrar deneyiniz.'
+    }
     setShowFailMessage(response.errorMessage)
 }
 function onApiSuccess(response){
@@ -50,7 +55,6 @@ function onApiSuccess(response){
    setShowLoadingScreen(false);
    setShowApiSuccess(true)
 }
-
 function validateState() {
     const  platformName  = marketPlace.platformName;
     const shipmentInfos = marketPlace.shipmentAmounts;
@@ -87,7 +91,6 @@ function validateState() {
     }
     return result;
 }
-
 function saveMarketPlaceAPI() {
     setShowLoadingScreen(true)
     const mutatedMarketPlace = {...marketPlace}
@@ -111,9 +114,10 @@ function saveMarketPlaceAPI() {
         setShowLoadingScreen(false);
     }
 }
-
 console.log('marketplace');
 console.log(marketPlace);
+console.log(`commission counter: ${commissionCounter}, shipment counter: ${shipmentCounter}`)
+console.log(`commission index for delete : ${commissionIndexArrayForDeleted}, shipment index for delete: ${shipmentIndexArrayForDeleted}`)
 console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
 
     return (
@@ -184,20 +188,20 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                         <br/>
                         <div className={'buttons'} style={{display:'flex',justifyContent:'center'}}>
                             <Button variant="contained" color={'success'} sx = {{width:'170px',height:'50px',justifyContent:'center',display:'flex'}} onClick={()=>setIsSaveDialogOpen(true)}>Onayla</Button>
-                            <Button variant="outlined" sx = {{width:'170px',height:'50px',marginLeft:'25px'}} onClick={addCommission}>Komisyon Ekle</Button>
-                            <Button variant="outlined"  onClick={addShipment} sx={{marginLeft:'25px',width:'150px',height:'50px'}}>Kargo Ekle</Button>
-                            <Button variant="outlined"    sx = {{marginLeft:'25px',width:'170px',height:'50px'}} onClick={resetAll}>Sıfırla</Button>
+                            <Button variant="outlined"  sx = {{width:'170px',height:'50px',marginLeft:'25px'}} onClick={addCommission}>Komisyon Ekle</Button>
+                            <Button variant="outlined"  sx={{marginLeft:'25px',width:'150px',height:'50px'}}   onClick={addShipment} >Kargo Ekle</Button>
+                            <Button variant="outlined"  sx = {{marginLeft:'25px',width:'170px',height:'50px'}} onClick={resetAll}>Sıfırla</Button>
                         </div>
 
                     <div className={"commission-shipment-tabs"} style={{marginTop:'15px'}}>
                         <div className={"comms"} style={{float:"left"}}>
                             {
                                 Array(commissionCounter).fill().map((i,index)=> (
-                                    indexArrayForDeleted.findIndex(element=>element === index) === -1 ?
+                                    commissionIndexArrayForDeleted.findIndex(element=>element === index) === -1 ?
                                     <CommissionInfoAccordion
                                         index = {index}
-                                        setIndexArray={setIndexArrayForDeleted}
-                                        indexArray={indexArrayForDeleted}
+                                        setIndexArray={setCommissionIndexArrayForDeleted}
+                                        indexArray={commissionIndexArrayForDeleted}
                                         marketPlace = {marketPlace}
                                         setMarketPlace = {setMarketPlace}/> : <></>
                                 ))
@@ -206,10 +210,13 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                         <div className={"shipments"} style={{float:'right'}}>
                             {
                                 Array(shipmentCounter).fill().map((i,index)=> (
+                                    shipmentIndexArrayForDeleted.findIndex(element=>element === index) === -1 ?
                                     <ShipmentInfoAccordion
                                         index = {index}
                                         marketPlace = {marketPlace}
-                                        setMarketPlace = {setMarketPlace}/>
+                                        setIndexArray={setShipmentIndexArrayForDeleted}
+                                        indexArray={shipmentIndexArrayForDeleted}
+                                        setMarketPlace = {setMarketPlace}/>  : <></>
                                 ))
                             }
                         </div>
