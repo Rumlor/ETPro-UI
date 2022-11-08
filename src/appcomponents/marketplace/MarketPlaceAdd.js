@@ -9,6 +9,7 @@ import ShipmentInfoAccordion from "../shipment/ShipmentInfoAccordion";
 import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
 
 import  {POST_MARKETPLACE} from "../../api/MarketplaceApi";
+import {CSSTransition} from "react-transition-group";
 
 
 
@@ -117,12 +118,22 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
 
     return (
             <div>
-                <div style={(showApiSuccess || showApiFail) ? {visibility:'visible'}:{visibility: 'hidden'}}>
-                    {
+                <CSSTransition
+                    //1. enter/exit state
+                    in={showApiFail}
+                    //2. transition durations
+                    timeout={2000}
+                    //3. classname prefix
+                    classNames={"api-fail-transition"}
+                    // add event listener
+                    addEndListener={()=>setTimeout(()=>{setShowApiFail(false);setShowApiSuccess(false)},2100)}
+                    unmountOnExit
+                >
+                    <div>
+                        {
 
-                    showApiSuccess&&!showApiFail?
-                            <Fade in={showApiSuccess}  addEndListener={()=>setTimeout(()=>setShowApiSuccess(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}  >
-                                    <Alert
+                            showApiSuccess&&!showApiFail?
+                                <Alert
 
                                     action={
                                         <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
@@ -132,21 +143,22 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                                 >
                                     Pazar yeri başarıyla kaydedildi!
                                 </Alert>
-                            </Fade>
-                        :
-                           <Fade  in={showApiFail}  addEndListener={()=>setTimeout(()=>setShowApiFail(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}   >
+                                :
+
+
                                 <Alert color={"error"}
-                                    action={
-                                        <Button color="inherit" size="medium" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                            Kapat
-                                        </Button>
-                                    }
+                                       className={'error'}
+                                       sx={{display:'flex',justifyContent:'center'}}
                                 >
-                                    {'Hata: '+showFailMessage}
+
+                                    <p>{'Hata: '+showFailMessage}</p>
+
                                 </Alert>
-                           </Fade>
-                    }
-                </div>
+
+                        }
+                    </div>
+                </CSSTransition>
+
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={showLoadingScreen}
