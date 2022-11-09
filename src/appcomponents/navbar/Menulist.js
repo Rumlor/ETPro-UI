@@ -10,13 +10,7 @@ export const Menulist = [
                 {
                     title:"Pazar Yeri Listele",
                     url:"/marketplaces/list"
-                },
-                {
-                    title:'Pazar Yeri Düzenle',
-                    url:"/marketplace/edit"
-
                 }
-
             ]
     },
     {

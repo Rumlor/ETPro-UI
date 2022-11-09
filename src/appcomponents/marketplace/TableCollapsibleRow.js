@@ -56,6 +56,10 @@ export default function TableCollapsibleRow(props) {
         return  resultString;
     }
 
+    function editAction() {
+
+    }
+
     return (
       <React.Fragment>
           <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -73,7 +77,7 @@ export default function TableCollapsibleRow(props) {
                   <Button startIcon={<DeleteIcon/>} onClick={deleteAction}>
                       Sil
                   </Button>
-                  <Button startIcon={<CheckIcon></CheckIcon>}>
+                  <Button startIcon={<CheckIcon/>} onClick={editAction}>
                       Güncelle
                   </Button>
               </TableCell>
