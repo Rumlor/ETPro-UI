@@ -51,9 +51,10 @@ function onApiFail(response){
 }
 function onApiSuccess(response){
         //clear previous state from previous api call
-   setShowApiFail(false)
-   setShowLoadingScreen(false);
-   setShowApiSuccess(true)
+    setShowApiSuccess(true)
+    setShowApiFail(false)
+    setShowLoadingScreen(false);
+
 }
 function validateState() {
     const  platformName  = marketPlace.platformName;

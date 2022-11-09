@@ -1,15 +1,42 @@
 
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import marketplacesJSON from "../data/marketplaces.json";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import {
+    Button,
+    ButtonGroup,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from "@mui/material";
 import TableCollapsibleRow from "./TableCollapsibleRow";
+import {GET_MARKETPLACES} from "../../api/MarketplaceApi";
 
 function MarketPlace() {
 
     //data is fed here.
-const [marketPlaces,setMarketPlaces] = useState(marketplacesJSON);
+const [marketPlaces,setMarketPlaces] = useState([]);
 
+//api call
+useEffect(
+    ()=>{
+    GET_MARKETPLACES(null,onApiSuccess,onApiFail)
+},[]);
+
+function onApiSuccess(response){
+    console.log('response from /get')
+    console.log(response)
+    setMarketPlaces(response.object)
+}
+function onApiFail(response){
+    console.log('fail response from /get')
+    console.log(response)
+}
     return(
         <div className={"marketlace-table"}>
             <TableContainer component={Paper}>
