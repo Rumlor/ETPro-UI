@@ -1,7 +1,6 @@
 import {
     Alert, Backdrop,
-    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fade,
-    TextField,
+    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField,
 } from "@mui/material";
 import {useRef, useState} from "react";
 import "./MarketPlaceAdd.css";
@@ -125,7 +124,7 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
             <div>
                 <CSSTransition
                     //1. enter/exit state
-                    in={showApiFail}
+                    in={showApiFail||showApiSuccess}
                     //2. transition durations
                     timeout={2000}
                     //3. classname prefix

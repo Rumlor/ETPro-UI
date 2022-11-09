@@ -24,7 +24,6 @@ function ShipmentInfoAccordion(props){
     }
     const [showSuccessMessage,setShowSuccessMessage] = useState(false)
     const [isSaveEvent,setIsSaveEvent] = useState(false)
-    const [isUpdateEvent,setIsUpdateEvent] = useState(false)
     const [shipmentInfoExpanded,setShipmentInfoExpanded] = useState(false);
     const [shipmentInfo,setShipmentInfo] = useState(initialState)
     const[volumeBased,setVolumeBased] = useState(false);

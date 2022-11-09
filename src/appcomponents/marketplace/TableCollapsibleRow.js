@@ -1,11 +1,43 @@
 import * as React from 'react';
-import {Box, Collapse, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Collapse,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography
+} from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CheckIcon from '@mui/icons-material/Check';
 import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
+import DeleteIcon from "@mui/icons-material/Delete";
+import {DELETE_MARKETPLACE} from "../../api/MarketplaceApi";
+
+
 export default function TableCollapsibleRow(props) {
     const [open, setOpen] = React.useState(false);
+
+    function deleteAction() {
+        console.log('platform name to be deleted '+props.marketPlace.platformName)
+        DELETE_MARKETPLACE(props.marketPlace.platformName,onSuccessApi,onFailApi);
+        props.setUpdateFlag(true)
+        props.setLoadingScreen(true)
+    }
+
+    function onSuccessApi(response) {
+        props.setLoadingScreen(false)
+        props.showApiSuccess(true)
+    }
+
+    function onFailApi(response){
+        props.setLoadingScreen(false)
+        props.showApiFail(true)
+    }
 
     function checkBounds(boundInfo) {
         if (boundInfo == null)
@@ -37,6 +69,14 @@ export default function TableCollapsibleRow(props) {
               </TableCell>
               <TableCell align={"center"}>{props.marketPlace.commissionAmounts.length+' Komisyon Bilgisi'}</TableCell>
               <TableCell align={"center"}>{props.marketPlace.shipmentAmounts.length+' Kargo Bilgisi'}</TableCell>
+              <TableCell align={"right"}>
+                  <Button startIcon={<DeleteIcon/>} onClick={deleteAction}>
+                      Sil
+                  </Button>
+                  <Button startIcon={<CheckIcon></CheckIcon>}>
+                      Güncelle
+                  </Button>
+              </TableCell>
           </TableRow>
 
           <TableRow>

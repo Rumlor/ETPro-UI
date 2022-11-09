@@ -10,9 +10,14 @@ export const API = [
                 "url":"marketplace/add"
             },
             {
-                "operation":"get",
+                operation:"get",
                 httpMethod: "get",
-                "url":"marketplace/get"
+                url:"marketplace/get"
+            },
+            {
+                operation: "delete",
+                httpMethod: "delete",
+                url:'marketplace/delete/'
             }
         ]
     }
