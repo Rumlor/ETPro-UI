@@ -67,6 +67,7 @@ function onApiFail(response){
     //open transition wrapper
     setToggleTransition(true)
 }
+
     return(
         <div>
             <div className={"backdrop"}>
@@ -100,28 +101,30 @@ function onApiFail(response){
                 </CSSTransition>
             </div>
                      <div className={"marketlace-table"}>
-                <TableContainer component={Paper}>
-                    <Table aria-label="collapsible table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell/>
-                                <TableCell align={"center"}><Typography variant={"h5"} gutterBottom>Pazar&nbsp;Yeri</Typography></TableCell>
-                                <TableCell align={"center"}><Typography variant={"h5"} gutterBottom>Komisyon&nbsp;Bilgileri</Typography></TableCell>
-                                <TableCell align={"center"}><Typography variant={"h5"} gutterBottom>Kargo&nbsp;Bilgileri</Typography></TableCell>
-                                <TableCell align={"right"}></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                marketPlaces.map((marketPlace,index)=>
-                                    (
-                                        <TableCollapsibleRow updateFlag = {updateFlag} setUpdateFlag={setUpdateFlag}  showApiFail = {setShowApiFail} showApiSuccess={setShowApiSuccess} setLoadingScreen = {setShowLoadingScreen} key = {index} marketPlace = {marketPlace} />
-                                    )
-                                )
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+
+                            <TableContainer component={Paper}>
+                                <Table aria-label="collapsible table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell/>
+                                            <TableCell align={"center"}><Typography variant={"h5"} gutterBottom>Pazar&nbsp;Yeri</Typography></TableCell>
+                                            <TableCell align={"center"}><Typography variant={"h5"} gutterBottom>Komisyon&nbsp;Bilgileri</Typography></TableCell>
+                                            <TableCell align={"center"}><Typography variant={"h5"} gutterBottom>Kargo&nbsp;Bilgileri</Typography></TableCell>
+                                            <TableCell align={"right"}></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            marketPlaces.map((marketPlace,index)=>
+                                                (
+                                                    <TableCollapsibleRow updateFlag = {updateFlag} setUpdateFlag={setUpdateFlag}  showApiFail = {setShowApiFail} showApiSuccess={setShowApiSuccess} setLoadingScreen = {setShowLoadingScreen} key = {index} marketPlace = {marketPlace} />
+                                                )
+                                            )
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+
             </div>
         </div>
             );

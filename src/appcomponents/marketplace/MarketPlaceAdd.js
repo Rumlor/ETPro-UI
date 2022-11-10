@@ -27,6 +27,7 @@ export default function MarketPlaceAdd(){
     //failed app operation message
     const [showFailMessage,setShowFailMessage] = useState("")
     // loading screen for add api call
+    const [toggleTransition,setToggleTransition] = useState(false)
     const [commissionIndexArrayForDeleted,setCommissionIndexArrayForDeleted] = useState([])
     const [shipmentIndexArrayForDeleted,setShipmentIndexArrayForDeleted] = useState([])
     const [showLoadingScreen,setShowLoadingScreen] = useState(false);
@@ -46,6 +47,7 @@ function onApiFail(response){
     {
         response.errorMessage = 'Server Bağlantısı sağlanamadı. Lütfen daha sonra tekrar deneyiniz.'
     }
+    setToggleTransition(true)
     setShowFailMessage(response.errorMessage)
 }
 function onApiSuccess(response){
@@ -53,6 +55,7 @@ function onApiSuccess(response){
     setShowApiSuccess(true)
     setShowApiFail(false)
     setShowLoadingScreen(false);
+    setToggleTransition(true)
 
 }
 function validateState() {
@@ -112,6 +115,7 @@ function saveMarketPlaceAPI() {
         setIsSaveDialogOpen(false)
         setShowFailMessage(validationResult.message)
         setShowLoadingScreen(false);
+        setToggleTransition(true)
     }
 }
 console.log('marketplace');
@@ -124,42 +128,22 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
             <div>
                 <CSSTransition
                     //1. enter/exit state
-                    in={showApiFail||showApiSuccess}
+                    in={toggleTransition}
                     //2. transition durations
                     timeout={2000}
                     //3. classname prefix
                     classNames={"api-fail-transition"}
                     // add event listener
-                    addEndListener={()=>setTimeout(()=>{setShowApiFail(false);setShowApiSuccess(false)},2100)}
+                    addEndListener={()=>setTimeout(()=>{setToggleTransition(false);setShowApiFail(false);setShowApiSuccess(false);},2100)}
                     unmountOnExit
                 >
                     <div>
-                        {
-
-                            showApiSuccess&&!showApiFail?
                                 <Alert
-
-                                    action={
-                                        <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                            Kapat
-                                        </Button>
-                                    }
-                                >
-                                    Pazar yeri başarıyla kaydedildi!
+                                    sx={{display:'flex',justifyContent:'center'}}
+                                    color={showApiSuccess?'success':'error'}
+                                    icon={false} >
+                                    <p>{showApiSuccess?`${marketPlace.platformName} başarıyla kaydedildi.`:`Hata: ${showFailMessage}`}</p>
                                 </Alert>
-                                :
-
-
-                                <Alert color={"error"}
-                                       className={'error'}
-                                       sx={{display:'flex',justifyContent:'center'}}
-                                >
-
-                                    <p>{'Hata: '+showFailMessage}</p>
-
-                                </Alert>
-
-                        }
                     </div>
                 </CSSTransition>
 
