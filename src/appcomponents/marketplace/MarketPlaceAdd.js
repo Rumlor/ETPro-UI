@@ -1,7 +1,6 @@
 import {
     Alert, Backdrop,
-    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fade,
-    TextField,
+    Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField,
 } from "@mui/material";
 import {useRef, useState} from "react";
 import "./MarketPlaceAdd.css";
@@ -9,6 +8,7 @@ import ShipmentInfoAccordion from "../shipment/ShipmentInfoAccordion";
 import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
 
 import  {POST_MARKETPLACE} from "../../api/MarketplaceApi";
+import {CSSTransition} from "react-transition-group";
 
 
 
@@ -27,7 +27,9 @@ export default function MarketPlaceAdd(){
     //failed app operation message
     const [showFailMessage,setShowFailMessage] = useState("")
     // loading screen for add api call
-    const [indexArrayForDeleted,setIndexArrayForDeleted] = useState([])
+    const [toggleTransition,setToggleTransition] = useState(false)
+    const [commissionIndexArrayForDeleted,setCommissionIndexArrayForDeleted] = useState([])
+    const [shipmentIndexArrayForDeleted,setShipmentIndexArrayForDeleted] = useState([])
     const [showLoadingScreen,setShowLoadingScreen] = useState(false);
     const [marketPlace,setMarketPlace] = useState(initial);
     const [isSaveDialogOpen,setIsSaveDialogOpen] = useState(false)
@@ -35,21 +37,27 @@ export default function MarketPlaceAdd(){
     const [shipmentCounter,setShipmentCounter] = useState(0);
     const addCommission = ()=>{setCommissionCounter(commissionCounter+1)};
     const addShipment = ()=>{setShipmentCounter(shipmentCounter+1)};
-    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial);platformNameRef.current.value = ''}
+    const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial); setCommissionIndexArrayForDeleted([]);setShipmentIndexArrayForDeleted([]); platformNameRef.current.value = ''}
 
 function onApiFail(response){
     setShowLoadingScreen(false);
     setShowApiFail(true)
     console.log(response)
+    if (response.errorMessage === undefined)
+    {
+        response.errorMessage = 'Server Bağlantısı sağlanamadı. Lütfen daha sonra tekrar deneyiniz.'
+    }
+    setToggleTransition(true)
     setShowFailMessage(response.errorMessage)
 }
 function onApiSuccess(response){
         //clear previous state from previous api call
-   setShowApiFail(false)
-   setShowLoadingScreen(false);
-   setShowApiSuccess(true)
-}
+    setShowApiSuccess(true)
+    setShowApiFail(false)
+    setShowLoadingScreen(false);
+    setToggleTransition(true)
 
+}
 function validateState() {
     const  platformName  = marketPlace.platformName;
     const shipmentInfos = marketPlace.shipmentAmounts;
@@ -86,7 +94,6 @@ function validateState() {
     }
     return result;
 }
-
 function saveMarketPlaceAPI() {
     setShowLoadingScreen(true)
     const mutatedMarketPlace = {...marketPlace}
@@ -108,45 +115,38 @@ function saveMarketPlaceAPI() {
         setIsSaveDialogOpen(false)
         setShowFailMessage(validationResult.message)
         setShowLoadingScreen(false);
+        setToggleTransition(true)
     }
 }
-
 console.log('marketplace');
 console.log(marketPlace);
+console.log(`commission counter: ${commissionCounter}, shipment counter: ${shipmentCounter}`)
+console.log(`commission index for delete : ${commissionIndexArrayForDeleted}, shipment index for delete: ${shipmentIndexArrayForDeleted}`)
 console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
 
     return (
             <div>
-                <div style={(showApiSuccess || showApiFail) ? {visibility:'visible'}:{visibility: 'hidden'}}>
-                    {
-
-                    showApiSuccess&&!showApiFail?
-                            <Fade in={showApiSuccess}  addEndListener={()=>setTimeout(()=>setShowApiSuccess(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}  >
-                                    <Alert
-
-                                    action={
-                                        <Button color="inherit" size="small" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                            Kapat
-                                        </Button>
-                                    }
-                                >
-                                    Pazar yeri başarıyla kaydedildi!
+                <CSSTransition
+                    //1. enter/exit state
+                    in={toggleTransition}
+                    //2. transition durations
+                    timeout={2000}
+                    //3. classname prefix
+                    classNames={"api-fail-transition"}
+                    // add event listener
+                    addEndListener={()=>setTimeout(()=>{setToggleTransition(false);},2100)}
+                    unmountOnExit
+                >
+                    <div>
+                                <Alert
+                                    sx={{display:'flex',justifyContent:'center'}}
+                                    color={showApiSuccess?'success':'error'}
+                                    icon={false} >
+                                    <p>{showApiSuccess?`${marketPlace.platformName} başarıyla kaydedildi.`:`Hata: ${showFailMessage}`}</p>
                                 </Alert>
-                            </Fade>
-                        :
-                           <Fade  in={showApiFail}  addEndListener={()=>setTimeout(()=>setShowApiFail(false),2000)} exit={true} unmountOnExit={true} timeout={{enter:1000,exit:0}}   >
-                                <Alert color={"error"}
-                                    action={
-                                        <Button color="inherit" size="medium" onClick={()=>{setShowApiSuccess(false);setShowApiFail(false)}}>
-                                            Kapat
-                                        </Button>
-                                    }
-                                >
-                                    {'Hata: '+showFailMessage}
-                                </Alert>
-                           </Fade>
-                    }
-                </div>
+                    </div>
+                </CSSTransition>
+
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={showLoadingScreen}
@@ -172,20 +172,20 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                         <br/>
                         <div className={'buttons'} style={{display:'flex',justifyContent:'center'}}>
                             <Button variant="contained" color={'success'} sx = {{width:'170px',height:'50px',justifyContent:'center',display:'flex'}} onClick={()=>setIsSaveDialogOpen(true)}>Onayla</Button>
-                            <Button variant="outlined" sx = {{width:'170px',height:'50px',marginLeft:'25px'}} onClick={addCommission}>Komisyon Ekle</Button>
-                            <Button variant="outlined"  onClick={addShipment} sx={{marginLeft:'25px',width:'150px',height:'50px'}}>Kargo Ekle</Button>
-                            <Button variant="outlined"    sx = {{marginLeft:'25px',width:'170px',height:'50px'}} onClick={resetAll}>Sıfırla</Button>
+                            <Button variant="outlined"  sx = {{width:'170px',height:'50px',marginLeft:'25px'}} onClick={addCommission}>Komisyon Ekle</Button>
+                            <Button variant="outlined"  sx={{marginLeft:'25px',width:'150px',height:'50px'}}   onClick={addShipment} >Kargo Ekle</Button>
+                            <Button variant="outlined"  sx = {{marginLeft:'25px',width:'170px',height:'50px'}} onClick={resetAll}>Sıfırla</Button>
                         </div>
 
                     <div className={"commission-shipment-tabs"} style={{marginTop:'15px'}}>
                         <div className={"comms"} style={{float:"left"}}>
                             {
                                 Array(commissionCounter).fill().map((i,index)=> (
-                                    indexArrayForDeleted.findIndex(element=>element === index) === -1 ?
+                                    commissionIndexArrayForDeleted.findIndex(element=>element === index) === -1 ?
                                     <CommissionInfoAccordion
                                         index = {index}
-                                        setIndexArray={setIndexArrayForDeleted}
-                                        indexArray={indexArrayForDeleted}
+                                        setIndexArray={setCommissionIndexArrayForDeleted}
+                                        indexArray={commissionIndexArrayForDeleted}
                                         marketPlace = {marketPlace}
                                         setMarketPlace = {setMarketPlace}/> : <></>
                                 ))
@@ -194,10 +194,13 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                         <div className={"shipments"} style={{float:'right'}}>
                             {
                                 Array(shipmentCounter).fill().map((i,index)=> (
+                                    shipmentIndexArrayForDeleted.findIndex(element=>element === index) === -1 ?
                                     <ShipmentInfoAccordion
                                         index = {index}
                                         marketPlace = {marketPlace}
-                                        setMarketPlace = {setMarketPlace}/>
+                                        setIndexArray={setShipmentIndexArrayForDeleted}
+                                        indexArray={shipmentIndexArrayForDeleted}
+                                        setMarketPlace = {setMarketPlace}/>  : <></>
                                 ))
                             }
                         </div>

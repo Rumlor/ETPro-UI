@@ -11,7 +11,6 @@ export const Menulist = [
                     title:"Pazar Yeri Listele",
                     url:"/marketplaces/list"
                 }
-
             ]
     },
     {
