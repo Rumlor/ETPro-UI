@@ -1,7 +1,6 @@
 
 
 import {useEffect, useState} from "react";
-import marketplacesJSON from "../data/marketplaces.json";
 import "./MarketPlace.css"
 import {
     Alert,
@@ -68,6 +67,8 @@ function onApiFail(response){
     setToggleTransition(true)
 }
 
+console.log('update flag')
+    console.log(updateFlag)
     return(
         <div>
             <div className={"backdrop"}>

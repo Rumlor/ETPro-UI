@@ -134,7 +134,7 @@ console.log('api success:'+showApiSuccess+' api fail:'+showApiFail)
                     //3. classname prefix
                     classNames={"api-fail-transition"}
                     // add event listener
-                    addEndListener={()=>setTimeout(()=>{setToggleTransition(false);setShowApiFail(false);setShowApiSuccess(false);},2100)}
+                    addEndListener={()=>setTimeout(()=>{setToggleTransition(false);},2100)}
                     unmountOnExit
                 >
                     <div>

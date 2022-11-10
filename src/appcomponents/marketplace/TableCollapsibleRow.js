@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {
+    AppBar,
     Box,
     Button,
-    Collapse,
-    IconButton,
+    Collapse, Dialog, Divider,
+    IconButton, List, ListItem, ListItemText,
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TableRow,
+    TableRow, Toolbar,
     Typography
 } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -17,19 +18,22 @@ import CheckIcon from '@mui/icons-material/Check';
 import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 import DeleteIcon from "@mui/icons-material/Delete";
 import {DELETE_MARKETPLACE} from "../../api/MarketplaceApi";
-
-
+import ListIcon from '@mui/icons-material/List';
+import {useState} from "react";
+import EditIcon from '@mui/icons-material/Edit';
+import ThresholdListItem from '../thresholdList/ThresholdListItem'
 export default function TableCollapsibleRow(props) {
     const [open, setOpen] = React.useState(false);
-
+    const [openThresholdList,setOpenThresholdList] = useState(false)
+    const [shipmentIndexForThreshold,setShipmentIndexForThreshold] = useState(null)
     function deleteAction() {
         console.log('platform name to be deleted '+props.marketPlace.platformName)
         DELETE_MARKETPLACE(props.marketPlace.platformName,onSuccessApi,onFailApi);
-        props.setUpdateFlag(true)
         props.setLoadingScreen(true)
     }
 
     function onSuccessApi(response) {
+        props.setUpdateFlag(true)
         props.setLoadingScreen(false)
         props.showApiSuccess(true)
     }
@@ -77,7 +81,7 @@ export default function TableCollapsibleRow(props) {
                   <Button startIcon={<DeleteIcon/>} onClick={deleteAction}>
                       Sil
                   </Button>
-                  <Button startIcon={<CheckIcon/>} onClick={editAction}>
+                  <Button startIcon={<EditIcon/>} onClick={editAction}>
                       Güncelle
                   </Button>
               </TableCell>
@@ -131,6 +135,7 @@ export default function TableCollapsibleRow(props) {
                                           <TableCell>Barem&nbsp;Bazlı</TableCell>
                                           <TableCell>Desi&nbsp;Aralığı</TableCell>
                                           <TableCell>Barem&nbsp;Aralığı</TableCell>
+                                          <TableCell align={'right'}>Sınır&nbsp;Değerleri</TableCell>
                                       </TableRow>
                                   </TableHead>
                                   <TableBody>
@@ -138,11 +143,22 @@ export default function TableCollapsibleRow(props) {
                                           props.marketPlace.shipmentAmounts.map((shipment,index)=>
                                               (
                                                   <TableRow key={index}>
-                                                      <TableCell>{shipment.amount+'TL'}</TableCell>
-                                                      <TableCell >{shipment.isVolumeBasedPricing?<CheckIcon sx={{paddingLeft:'35px'}} />:<RemoveSharpIcon sx={{paddingLeft:'35px'}}/>}</TableCell>
-                                                      <TableCell >{!shipment.isVolumeBasedPricing?<CheckIcon sx={{paddingLeft:'35px'}} />:<RemoveSharpIcon sx={{paddingLeft:'35px'}}/>}</TableCell>
-                                                      <TableCell sx={{paddingLeft:'35px'}}> {checkBounds(shipment.volumeInfo)} </TableCell>
-                                                      <TableCell sx={{paddingLeft:'35px'}}> {checkBounds(shipment.scaleInfo)} </TableCell>
+                                                      <TableCell>{shipment.shipmentInfo.amount+'TL'}</TableCell>
+                                                      <TableCell >{shipment.shipmentInfo.isVolumeBasedPricing?<CheckIcon sx={{paddingLeft:'35px'}} />:<RemoveSharpIcon sx={{paddingLeft:'35px'}}/>}</TableCell>
+                                                      <TableCell >{!shipment.shipmentInfo.isVolumeBasedPricing?<CheckIcon sx={{paddingLeft:'35px'}} />:<RemoveSharpIcon sx={{paddingLeft:'35px'}}/>}</TableCell>
+                                                      <TableCell sx={{paddingLeft:'35px'}}> {checkBounds(shipment.shipmentInfo.volumeInfo)} </TableCell>
+                                                      <TableCell sx={{paddingLeft:'35px'}}> {checkBounds(shipment.shipmentInfo.scaleInfo)} </TableCell>
+                                                      <TableCell align={'right'} sx={{paddingLeft:'35px'}}>
+                                                          <Button
+                                                              onClick={()=>{setShipmentIndexForThreshold(index);setOpenThresholdList(true)}}
+                                                              startIcon={<ListIcon/>}>
+                                                              Listele
+                                                          </Button>
+                                                          <div className={'threshold-info-dialog'}>
+                                                              <ThresholdListItem thresholdInfo = {shipment.thresholdInfo} open={openThresholdList} setOpen={setOpenThresholdList}  index={index} selectedShipmentIndex = {shipmentIndexForThreshold}/>
+                                                          </div>
+
+                                                      </TableCell>
                                                   </TableRow>
                                               )
                                           )
