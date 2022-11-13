@@ -49,7 +49,22 @@ import {API} from "./ApiList.js"
            })
            .catch(reason => onFail(reason))
    }
-
+   export const PUT_MARKETPLACE = (body,onSuccess,onFail)=>{
+       const base =  API[0].origin;
+       const url =API[0].apis[3].url
+       const method = API[0].apis[3].httpMethod;
+       const reqOptions =  prepareRequestOptions(method,{'Content-Type': 'application/json'},body);
+       fetch(base.concat(url),reqOptions)
+           .then(response=>response.json())
+           .then((response)=> {
+               if (response.result){
+                   onSuccess(response)
+               } else {
+                   onFail(response)
+               }
+           })
+           .catch(reason => onFail(reason))
+   }
   function  prepareRequestOptions(httpMethod,httpHeaders,body){
        console.log(`method ${httpMethod},headers:${httpHeaders} ,body:${body}`)
          return   {

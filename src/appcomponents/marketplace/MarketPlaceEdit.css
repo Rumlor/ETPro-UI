@@ -1,0 +1,23 @@
+.api-fail-transition-exit {
+    opacity: 1;
+}
+.api-fail-transition-exit-active {
+    opacity: 0;
+    transition: opacity 2000ms;
+}
+.api-fail-transition-exit-done {
+    visibility: hidden;
+}
+
+.api-fail-transition-enter {
+    visibility: visible;
+    opacity: 0;
+
+}
+.api-fail-transition-enter-active {
+    opacity: 1;
+    transition: opacity 1000ms;
+}
+.api-fail-transition-enter-done {
+
+}

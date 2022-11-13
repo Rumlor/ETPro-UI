@@ -18,6 +18,11 @@ export const API = [
                 operation: "delete",
                 httpMethod: "delete",
                 url:'marketplace/delete/'
+            },
+            {
+                operation: "update",
+                httpMethod: "put",
+                url: "marketplace/put"
             }
         ]
     }
