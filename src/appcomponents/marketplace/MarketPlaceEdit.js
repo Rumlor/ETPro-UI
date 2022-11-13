@@ -39,8 +39,6 @@ const shipmentTableRows = marketPlace.shipmentAmounts.map((shipment,index)=>{
 const newShipment = {...shipment.shipmentInfo}
 newShipment.scaleInfo = {...newShipment.scaleInfo}
 newShipment.volumeInfo = {...newShipment.volumeInfo}
-console.log('setting rows.next shipment ')
-console.log(newShipment)
 newShipment.id = index;
 if (newShipment.isVolumeBasedPricing){
     newShipment.upperBound = newShipment.volumeInfo.upperBound;
@@ -68,16 +66,34 @@ function reducer(state,action) {
             updatedCategory.categoryInfos[0].categoryName = action.changeToValue
             state.commissionAmounts.push(updatedCategory)
             return {...state}
+        case 'amountChanged':
+            const updatedShipmentAmount =  JSON.parse(JSON.stringify(state.shipmentAmounts[action.shipmentIndex]));
+            state.shipmentAmounts.splice(action.shipmentIndex,1)
+            updatedShipmentAmount.shipmentInfo.amount = parseFloat(action.changeToValue)
+            state.shipmentAmounts.push(updatedShipmentAmount)
+            return {...state}
+
         case 'reset':
                 console.log('resetting')
                 return  {...initialValueSupplier()};
     }
 }
 const cellEditCommitShipment = (e) =>{
-    const shipmentToBeUpdated =  {...props.marketPlace.shipmentAmounts[e.id]};
-    //shipmentToBeUpdated.shipmentInfo
     console.log('edit')
     console.log(e)
+    let operationType = null;
+    if (e.field === 'amount'){
+        operationType = 'amountChanged'
+    }
+    else if (e.field==='upperBound' && e.row.isVolumeBasedPricing === 'Evet'){
+        operationType = 'volumeInfoChanged'
+    }
+    else if (e.field==='upperBound' && e.row.isVolumeBasedPricing === 'Hayır'){
+        operationType = 'scaleInfoChanged'
+    }
+    const changeToValue = e.value
+    const indexOfChangedShipment = e.id;
+    setMarketPlace({type:operationType,changeToValue:changeToValue,shipmentIndex:indexOfChangedShipment})
 }
 const callEditCommitCommission = (e) =>{
     console.log('edit commission')
@@ -119,7 +135,8 @@ function putMarketPlace(){
     PUT_MARKETPLACE(marketPlace,onSuccess,onFail);
 
 }
-
+console.log('marketplace in edit')
+    console.log(marketPlace)
     return (
 
         <Dialog fullScreen open={props.open}>
