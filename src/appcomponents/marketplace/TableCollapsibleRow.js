@@ -64,7 +64,7 @@ export default function TableCollapsibleRow(props) {
 
     return (
       <React.Fragment>
-          <MarketPlaceEdit marketPlace = {props.marketPlace} open = {showUpdateMarketPlace} setOpen={setShowUpdateMarketPlace} />
+          <MarketPlaceEdit marketPlace = {props.marketPlace} open = {showUpdateMarketPlace} setOpen={setShowUpdateMarketPlace} setUpdateFlag = {props.setUpdateFlag}/>
           <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={()=>setOpen(!open)}>

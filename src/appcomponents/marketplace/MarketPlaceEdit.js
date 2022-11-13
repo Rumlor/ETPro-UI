@@ -1,10 +1,11 @@
-import {AppBar, Button, Dialog, IconButton, TextField, Toolbar, Typography} from "@mui/material";
+import {Alert, AppBar, Button, Dialog, IconButton, TextField, Toolbar, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import * as React from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import {useReducer} from "react";
+import {useReducer, useState} from "react";
 import {PUT_MARKETPLACE} from "../../api/MarketplaceApi";
-
+import {CSSTransition} from "react-transition-group";
+import "./MarketPlaceEdit.css"
 export default function MarketPlaceEdit(props){
 
 function initialValueSupplier() {
@@ -36,6 +37,10 @@ const shipmentTableColumns = [
 ]
 const shipmentTableRows = marketPlace.shipmentAmounts.map((shipment,index)=>{
 const newShipment = {...shipment.shipmentInfo}
+newShipment.scaleInfo = {...newShipment.scaleInfo}
+newShipment.volumeInfo = {...newShipment.volumeInfo}
+console.log('setting rows.next shipment ')
+console.log(newShipment)
 newShipment.id = index;
 if (newShipment.isVolumeBasedPricing){
     newShipment.upperBound = newShipment.volumeInfo.upperBound;
@@ -47,8 +52,6 @@ delete newShipment.scaleInfo;
 delete newShipment.volumeInfo;
 return newShipment;
 })
-
-
 function reducer(state,action) {
     switch (action.type){
         case 'percentEdited':
@@ -93,24 +96,23 @@ const callEditCommitCommission = (e) =>{
     const indexOfChangedCommission = e.id
     setMarketPlace( {type:operationType, changeToValue:changeToValue, commissionIndex:indexOfChangedCommission } );
 }
-    console.log('UPDATED!!')
-    console.log(marketPlace)
-    function onSuccess(res) {
+function onSuccess(res) {
+    console.log('CLOSING!!')
+    props.setUpdateFlag(true)
+    props.setOpen(false);
+    //setShowApiSuccess(true)
+}
+function onFail(res) {
 
-    }
+}
+function transformMarketPlace(marketPlace) {
+    marketPlace.shipmentAmounts.forEach(value => delete value.thresholdInfo);
+    const transformed = marketPlace.shipmentAmounts.map(value => value.shipmentInfo);
+    marketPlace.shipmentAmounts = [...transformed]
+    return marketPlace;
+}
 
-    function onFail(res) {
-
-    }
-
-    function transformMarketPlace(marketPlace) {
-        marketPlace.shipmentAmounts.forEach(value => delete value.thresholdInfo);
-        const transformed = marketPlace.shipmentAmounts.map(value => value.shipmentInfo);
-        marketPlace.shipmentAmounts = [...transformed]
-        return marketPlace;
-    }
-
-    function putMarketPlace(){
+function putMarketPlace(){
     const body = transformMarketPlace(marketPlace)
         console.log('putting')
         console.log(body)
@@ -142,7 +144,6 @@ const callEditCommitCommission = (e) =>{
             </AppBar>
             <br/>
             <div className={'content'} >
-
                 <div style={{display:"flex",justifyContent:"center"}} className={"platform-name"}>
                     <TextField label={props.marketPlace.platformName} disabled title={"Platform İsmi"}/>
                 </div>
