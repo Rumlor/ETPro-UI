@@ -22,27 +22,26 @@ import ListIcon from '@mui/icons-material/List';
 import {useState} from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import ThresholdListItem from '../thresholdList/ThresholdListItem'
+import MarketPlaceEdit from "./MarketPlaceEdit";
 export default function TableCollapsibleRow(props) {
     const [open, setOpen] = React.useState(false);
     const [openThresholdList,setOpenThresholdList] = useState(false)
+    const [showUpdateMarketPlace,setShowUpdateMarketPlace] = useState(false)
     const [shipmentIndexForThreshold,setShipmentIndexForThreshold] = useState(null)
     function deleteAction() {
         console.log('platform name to be deleted '+props.marketPlace.platformName)
         DELETE_MARKETPLACE(props.marketPlace.platformName,onSuccessApi,onFailApi);
         props.setLoadingScreen(true)
     }
-
     function onSuccessApi(response) {
         props.setUpdateFlag(true)
         props.setLoadingScreen(false)
         props.showApiSuccess(true)
     }
-
     function onFailApi(response){
         props.setLoadingScreen(false)
         props.showApiFail(true)
     }
-
     function checkBounds(boundInfo) {
         if (boundInfo == null)
             return ''
@@ -59,13 +58,13 @@ export default function TableCollapsibleRow(props) {
 
         return  resultString;
     }
-
     function editAction() {
-
+        setShowUpdateMarketPlace(true)
     }
 
     return (
       <React.Fragment>
+          <MarketPlaceEdit marketPlace = {props.marketPlace} open = {showUpdateMarketPlace} setOpen={setShowUpdateMarketPlace} />
           <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={()=>setOpen(!open)}>
@@ -86,7 +85,6 @@ export default function TableCollapsibleRow(props) {
                   </Button>
               </TableCell>
           </TableRow>
-
           <TableRow>
               <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                   <Collapse in={open} timeout="auto" unmountOnExit>

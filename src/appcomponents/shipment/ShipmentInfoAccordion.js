@@ -10,7 +10,7 @@ import {
 import SaveIcon from '@mui/icons-material/Save';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import {useState} from "react";
+import {useReducer, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 
@@ -26,8 +26,31 @@ function ShipmentInfoAccordion(props){
     const [isSaveEvent,setIsSaveEvent] = useState(false)
     const [shipmentInfoExpanded,setShipmentInfoExpanded] = useState(false);
     const [shipmentInfo,setShipmentInfo] = useState(initialState)
+
+    function volumeScaleToggle(state,action) {
+        const updated = {...shipmentInfo}
+        updated.isVolumeBasedPricing = action.type
+            updated.scaleInfo = null
+            updated.volumeInfo = null
+               return updated;
+
+    }
+
+    const  [toggleVolumeScaleInfo,dispatch] = useReducer(volumeScaleToggle,null);
     const[volumeBased,setVolumeBased] = useState(false);
     const  handleVolumeBased = ()=>{
+        dispatch({type:!volumeBased})
+       console.log(toggleVolumeScaleInfo)
+        //if from false to true
+        if (!volumeBased){
+            console.log('from false to true')
+            setShipmentInfo({...shipmentInfo,scaleInfo:shipmentInfo.volumeInfo})
+        }
+        //if from true to false
+        else {
+            console.log('from true to false')
+            setShipmentInfo({...shipmentInfo,volumeInfo:shipmentInfo.scaleInfo})
+        }
         setVolumeBased(!volumeBased);
         setShipmentInfo({...shipmentInfo,isVolumeBasedPricing:!volumeBased})
     };
@@ -43,7 +66,7 @@ function ShipmentInfoAccordion(props){
 
     console.log('shipment '+props.index)
     console.log(shipmentInfo)
-    console.log('success message'+showSuccessMessage)
+    console.log('success message :'+showSuccessMessage)
     function saveEvent() {
 
         setIsSaveEvent(false)
