@@ -10,29 +10,65 @@ import {
 import SaveIcon from '@mui/icons-material/Save';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import {useState} from "react";
+import {useReducer, useRef, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 
 function ShipmentInfoAccordion(props){
-    const initialState = {
-        index:props.index,
-        amount:null,
-        isVolumeBasedPricing:false,
-        volumeInfo :{},
-        scaleInfo:{}
+    const initialState = (indexOfShipment)=> {
+     return    {
+                    index:indexOfShipment,
+                    amount:null,
+                    isVolumeBasedPricing:false,
+                    volumeInfo:{},
+                    scaleInfo:{}
+            }
     }
+    const scaleInfoTextRef = useRef();
+    const volumeInfoTextRef = useRef();
+      const reducer = (state,action)=>{
+        switch (action.type) {
+            case 'amountChanged':
+                return {...state,amount:action.amount}
+            case 'isVolumeBasedPricingChanged':
+                const updatedState = {...state}
+                updatedState.scaleInfo = null
+                updatedState.volumeInfo = null
+                if (action.volumeBased){
+                    scaleInfoTextRef.current.value = null
+                } else {
+                    volumeInfoTextRef.current.value = null
+                }
+                return {...state,...{...updatedState,isVolumeBasedPricing:action.volumeBased}}
+            case 'scaleInfoChanged':
+                return {...state,scaleInfo:{...state.scaleInfo,upperBound:action.scaleInfoUpperBound}}
+            case 'volumeInfoChanged':
+                return {...state,volumeInfo:{...state.volumeInfo,upperBound:action.volumeInfoUpperBound}}
+        }
+    }
+
     const [showSuccessMessage,setShowSuccessMessage] = useState(false)
     const [isSaveEvent,setIsSaveEvent] = useState(false)
     const [shipmentInfoExpanded,setShipmentInfoExpanded] = useState(false);
-    const [shipmentInfo,setShipmentInfo] = useState(initialState)
+    const [shipmentInfo,setShipmentInfo] = useReducer(reducer,props.index,initialState)
     const[volumeBased,setVolumeBased] = useState(false);
     const  handleVolumeBased = ()=>{
+
+        //if from false to true
+        if (!volumeBased){
+            console.log('from false to true')
+            setShipmentInfo({...shipmentInfo,scaleInfo:shipmentInfo.volumeInfo})
+        }
+        //if from true to false
+        else {
+            console.log('from true to false')
+            setShipmentInfo({...shipmentInfo,volumeInfo:shipmentInfo.scaleInfo})
+        }
         setVolumeBased(!volumeBased);
-        setShipmentInfo({...shipmentInfo,isVolumeBasedPricing:!volumeBased})
+        setShipmentInfo({...shipmentInfo,isVolumeBasedPricing:volumeBased})
     };
     function handleChange(e) {
-        setShipmentInfo({...shipmentInfo,[e.target.name]:e.target.value});
+       // setShipmentInfo({...shipmentInfo,[e.target.name]:e.target.value});
     }
     function handleScaleInfoChange(e) {
         setShipmentInfo({...shipmentInfo,scaleInfo: {...shipmentInfo.scaleInfo,[e.target.name]:e.target.value}})
@@ -40,10 +76,6 @@ function ShipmentInfoAccordion(props){
     function handleVolumeInfoChange(e) {
         setShipmentInfo({...shipmentInfo,volumeInfo: {...shipmentInfo.volumeInfo,[e.target.name]:e.target.value}})
     }
-
-    console.log('shipment '+props.index)
-    console.log(shipmentInfo)
-    console.log('success message'+showSuccessMessage)
     function saveEvent() {
 
         setIsSaveEvent(false)
@@ -67,7 +99,6 @@ function ShipmentInfoAccordion(props){
         }
         setShowSuccessMessage(true);
     }
-
     function deleteEvent() {
         //add shipment to delete array
         const newArray = [...props.indexArray];
@@ -85,6 +116,9 @@ function ShipmentInfoAccordion(props){
         }
     }
 
+    console.log('shipment '+props.index)
+    console.log(shipmentInfo)
+    console.log('success message :'+showSuccessMessage)
     return (
     <div style={{width:'50vw'}}>
         <Accordion expanded={shipmentInfoExpanded} onChange={()=>{
@@ -115,9 +149,14 @@ function ShipmentInfoAccordion(props){
                                     <TextField
                                         name={'amount'}
                                         label="Tutar(TL)"
-                                        onChange={handleChange}
+                                        onChange={e=>setShipmentInfo({type:'amountChanged',amount:e.target.value})}
                                     />
-                                    <FormControlLabel sx={{marginLeft:'50px'}} control={<Checkbox/>} onClick={handleVolumeBased} checked={volumeBased} label="Desi Bazlı" />
+                                    <FormControlLabel sx={{marginLeft:'50px'}} control={<Checkbox/>} onClick={()=>
+                                            {
+                                                setShipmentInfo({type:'isVolumeBasedPricingChanged',volumeBased:!volumeBased});
+                                                setVolumeBased(!volumeBased);
+                                            }
+                                        } checked={volumeBased} label="Desi Bazlı" />
                             </div>
 
                             <div className={'scale-volume-info'} >
@@ -126,14 +165,16 @@ function ShipmentInfoAccordion(props){
                                         <TextField
                                             name={'upperBound'}
                                             label="Kargo Barem"
-                                            onChange={handleScaleInfoChange}
+                                            inputRef={scaleInfoTextRef}
+                                            onChange={(e)=>setShipmentInfo({type:'scaleInfoChanged',scaleInfoUpperBound:e.target.value})}
                                         />
                                     ) :
                                         (
                                             <TextField
                                                 name={'upperBound'}
                                                 label="Desi Barem"
-                                                onChange={handleVolumeInfoChange}
+                                                inputRef={volumeInfoTextRef}
+                                                onChange={e=>setShipmentInfo({type:'volumeInfoChanged',volumeInfoUpperBound:e.target.value})}
                                             />
                                         )
                                 }
