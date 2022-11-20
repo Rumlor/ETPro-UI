@@ -52,30 +52,6 @@ function ShipmentInfoAccordion(props){
     const [shipmentInfoExpanded,setShipmentInfoExpanded] = useState(false);
     const [shipmentInfo,setShipmentInfo] = useReducer(reducer,props.index,initialState)
     const[volumeBased,setVolumeBased] = useState(false);
-    const  handleVolumeBased = ()=>{
-
-        //if from false to true
-        if (!volumeBased){
-            console.log('from false to true')
-            setShipmentInfo({...shipmentInfo,scaleInfo:shipmentInfo.volumeInfo})
-        }
-        //if from true to false
-        else {
-            console.log('from true to false')
-            setShipmentInfo({...shipmentInfo,volumeInfo:shipmentInfo.scaleInfo})
-        }
-        setVolumeBased(!volumeBased);
-        setShipmentInfo({...shipmentInfo,isVolumeBasedPricing:volumeBased})
-    };
-    function handleChange(e) {
-       // setShipmentInfo({...shipmentInfo,[e.target.name]:e.target.value});
-    }
-    function handleScaleInfoChange(e) {
-        setShipmentInfo({...shipmentInfo,scaleInfo: {...shipmentInfo.scaleInfo,[e.target.name]:e.target.value}})
-    }
-    function handleVolumeInfoChange(e) {
-        setShipmentInfo({...shipmentInfo,volumeInfo: {...shipmentInfo.volumeInfo,[e.target.name]:e.target.value}})
-    }
     function saveEvent() {
 
         setIsSaveEvent(false)
