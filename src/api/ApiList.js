@@ -27,7 +27,7 @@ export const API = [
         ]
     },
     {
-        origin: "http://localhost:6161/api/",
+        "origin":"http://localhost:6161/api/",
         "name":"product",
         "apis":[
             {
@@ -39,6 +39,22 @@ export const API = [
                 operation: "export",
                 httpMethod: "post",
                 url: "product/export"
+            }
+        ]
+    },
+    {
+        "origin":"http://localhost:6161/api/",
+        "name":"authentication",
+        "apis":[
+            {
+                operation: "register",
+                httpMethod: "post",
+                url:"auth/signup"
+            },
+            {
+                operation: "login",
+                httpMethod: "post",
+                url:"auth/sign-in"
             }
         ]
     }

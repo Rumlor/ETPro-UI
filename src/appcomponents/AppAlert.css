@@ -1,0 +1,14 @@
+.api-fail-or-success-transition-enter{
+    opacity: 0;
+}
+.api-fail-or-success-transition-enter-active {
+    opacity: 1;
+    transition: ease-in 500ms;
+}
+.api-fail-or-success-transition-exit {
+    opacity: 1;
+}
+.api-fail-or-success-transition-exit-active {
+    opacity: 0;
+    transition: ease-out 500ms;
+}

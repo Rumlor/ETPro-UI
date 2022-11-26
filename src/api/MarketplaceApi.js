@@ -1,6 +1,6 @@
 import {API} from "./ApiList.js"
-
-
+import headerService from "../services/HeaderService";
+import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderService";
    export  const POST_MARKETPLACE = (body,onSuccess,onFail)=>{
        const reqOptions  = prepareRequestOptions(API[0].apis[0].httpMethod,{'Content-Type': 'application/json'},body)
 
@@ -19,8 +19,7 @@ import {API} from "./ApiList.js"
 
     }
    export const GET_MARKETPLACES = (body,OnSuccess,OnFail) => {
-        console.log('here')
-        const reqOptions  = prepareRequestOptions(API[0].apis[1].httpMethod,{'Content-Type': 'application/json'},body)
+        const reqOptions  = prepareRequestOptions(API[0].apis[1].httpMethod,getAuthenticatedUserHeaderFromLocalStorage(),body)
         fetch(API[0].origin.concat(API[0].apis[1].url),reqOptions)
             .then(response=>response.json())
             .then((response)=> {
@@ -50,10 +49,12 @@ import {API} from "./ApiList.js"
            .catch(reason => onFail(reason))
    }
    export const PUT_MARKETPLACE = (body,onSuccess,onFail)=>{
+       console.log('token for put')
+       console.log(getAuthenticatedUserHeaderFromLocalStorage())
        const base =  API[0].origin;
        const url =API[0].apis[3].url
        const method = API[0].apis[3].httpMethod;
-       const reqOptions =  prepareRequestOptions(method,{'Content-Type': 'application/json'},body);
+       const reqOptions =  prepareRequestOptions(method,{...getAuthenticatedUserHeaderFromLocalStorage(), ...{'Content-Type': 'application/json'}},body);
        fetch(base.concat(url),reqOptions)
            .then(response=>response.json())
            .then((response)=> {
@@ -65,7 +66,7 @@ import {API} from "./ApiList.js"
            })
            .catch(reason => onFail(reason))
    }
-  function  prepareRequestOptions(httpMethod,httpHeaders,body){
+   function  prepareRequestOptions(httpMethod,httpHeaders,body){
        console.log(`method ${httpMethod},headers:${httpHeaders} ,body:${body}`)
          return   {
                       method:httpMethod !== null ? httpMethod : null,
