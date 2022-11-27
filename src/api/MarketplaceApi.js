@@ -1,8 +1,8 @@
 import {API} from "./ApiList.js"
-import headerService from "../services/HeaderService";
+
 import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderService";
    export  const POST_MARKETPLACE = (body,onSuccess,onFail)=>{
-       const reqOptions  = prepareRequestOptions(API[0].apis[0].httpMethod,{'Content-Type': 'application/json'},body)
+       const reqOptions  = prepareRequestOptions(API[0].apis[0].httpMethod,getHttpHeadersWithToken(),body)
 
          fetch(API[0].origin.concat(API[0].apis[0].url),reqOptions)
              .then(response=>response.json())
@@ -36,7 +36,7 @@ import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderServic
        const base =  API[0].origin;
        const url =API[0].apis[2].url.concat(pathVariable)
        const method = API[0].apis[2].httpMethod;
-       const reqOptions =  prepareRequestOptions(method,{'Content-Type': 'application/json'},null);
+       const reqOptions =  prepareRequestOptions(method,getHttpHeadersWithToken(),null);
        fetch(base.concat(url),reqOptions)
            .then(response=>response.json())
            .then((response)=> {
@@ -54,7 +54,7 @@ import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderServic
        const base =  API[0].origin;
        const url =API[0].apis[3].url
        const method = API[0].apis[3].httpMethod;
-       const reqOptions =  prepareRequestOptions(method,{...getAuthenticatedUserHeaderFromLocalStorage(), ...{'Content-Type': 'application/json'}},body);
+       const reqOptions =  prepareRequestOptions(method,getHttpHeadersWithToken(),body);
        fetch(base.concat(url),reqOptions)
            .then(response=>response.json())
            .then((response)=> {
@@ -66,6 +66,10 @@ import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderServic
            })
            .catch(reason => onFail(reason))
    }
+
+   function getHttpHeadersWithToken() {
+    return {...getAuthenticatedUserHeaderFromLocalStorage(), ...{'Content-Type': 'application/json'}};
+}
    function  prepareRequestOptions(httpMethod,httpHeaders,body){
        console.log(`method ${httpMethod},headers:${httpHeaders} ,body:${body}`)
          return   {

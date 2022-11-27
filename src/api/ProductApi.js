@@ -1,7 +1,8 @@
 import {API} from "./ApiList";
+import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderService";
 
 export  const POST_PRODUCT_CALCULATOR = (body,onSuccess,onFail)=>{
-    const reqOptions  = prepareRequestOptions(API[1].apis[0].httpMethod,{'Content-Type': 'application/json'},body)
+    const reqOptions  = prepareRequestOptions(API[1].apis[0].httpMethod,getHttpHeadersWithToken(),body)
 
     fetch(API[1].origin.concat(API[1].apis[0].url),reqOptions)
         .then(response=>response.json())
@@ -18,7 +19,7 @@ export  const POST_PRODUCT_CALCULATOR = (body,onSuccess,onFail)=>{
 
 }
 export const POST_PRODUCT_EXPORT_EXCEL = (body,onSuccess,onFail) =>{
-    const reqOptions  = prepareRequestOptions(API[1].apis[1].httpMethod,{'Content-Type': 'application/json'},body)
+    const reqOptions  = prepareRequestOptions(API[1].apis[1].httpMethod,getHttpHeadersWithToken(),body)
 
     fetch(API[1].origin.concat(API[1].apis[1].url),reqOptions)
         .then(response=>response.blob())
@@ -38,4 +39,7 @@ function  prepareRequestOptions(httpMethod,httpHeaders,body){
         body: body!== null ? JSON.stringify(body) : null
     }
 
+}
+function getHttpHeadersWithToken() {
+    return {...getAuthenticatedUserHeaderFromLocalStorage(), ...{'Content-Type': 'application/json'}};
 }
