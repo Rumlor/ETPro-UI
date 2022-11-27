@@ -3,9 +3,12 @@ import "./Login.css"
 import {loginServiceObject} from "../../services/LoginService";
 import AppAlert from "../AppAlert";
 import AppBackDrop from "../AppBackDrop";
+import {useNavigate} from "react-router-dom";
+
+
 export default function Login(){
 
-
+    const navigator = useNavigate();
     const [currentViewMode,setCurrentViewMode] = useState("logIn");
     const [loginRequest,setLoginRequest] = useState({
         userName:null,
@@ -15,9 +18,13 @@ export default function Login(){
     const [showLoading,setShowLoading] = useState(false)
     const   changeView = (view) => {setCurrentViewMode(view)}
 
+
+
     function onSuccessLogin(res) {
         console.log('login comp successful api call')
         setShowLoading(false)
+        navigator("/")
+        window.location.reload()
     }
     function onFailLogin(res) {
         console.log('login comp failed api call')
