@@ -27,8 +27,9 @@ const [marketPlaces,setMarketPlaces] = useState([]);
 const [updateFlag,setUpdateFlag] = useState(true)
 const [showApiFail,setShowApiFail] = useState(false)
 const [showApiSuccess,setShowApiSuccess] = useState(false)
-    const [toggleTransition,setToggleTransition] = useState(false)
+const [toggleTransition,setToggleTransition] = useState(false)
 const [showLoadingScreen,setShowLoadingScreen] = useState(false)
+const [apiMessage,setApiMessage] = useState('')
 //api call
 useEffect(
     ()=>{
@@ -57,6 +58,7 @@ function onApiSuccess(response){
 function onApiFail(response){
     console.log('fail response from /get')
     console.log(response)
+    setApiMessage(response.message)
     //close loading screen
     setShowLoadingScreen(false)
     // close api success  flag
@@ -92,7 +94,7 @@ console.log('update flag')
 
                                 <Alert icon={false}  sx={{display:'flex',justifyContent:'center'}}  color={showApiSuccess?'success':'error'} className={"alert-success"}>
                                     {
-                                       <p>{ showApiSuccess?`Pazar yeri sayısı ${marketPlaces.length}.`:`Pazar yerleri getirilirken hatayla karşılaşıldı.`}</p>
+                                       <p>{ showApiSuccess?`Pazar yeri sayısı ${marketPlaces.length}.`:`${apiMessage}`}</p>
                                     }
                                 </Alert>
 
