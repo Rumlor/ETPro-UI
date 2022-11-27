@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import "./Login.css"
 import {loginServiceObject} from "../../services/LoginService";
 import AppAlert from "../AppAlert";
@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 
 
 export default function Login(){
-
+    const loggedInUser =  loginServiceObject.getAuthenticatedUserService();
     const navigator = useNavigate();
     const [currentViewMode,setCurrentViewMode] = useState("logIn");
     const [loginRequest,setLoginRequest] = useState({
@@ -17,9 +17,6 @@ export default function Login(){
     const [loginAlert,setAlert] = useState({show:false,message:null})
     const [showLoading,setShowLoading] = useState(false)
     const   changeView = (view) => {setCurrentViewMode(view)}
-
-
-
     function onSuccessLogin(res) {
         console.log('login comp successful api call')
         setShowLoading(false)
@@ -31,7 +28,6 @@ export default function Login(){
         setShowLoading(false)
         setAlert({show: true,message: res.message})
     }
-
     function loginHandler(e) {
         e.preventDefault()
         console.log(loginRequest)
@@ -48,7 +44,7 @@ export default function Login(){
         else
             setLoginRequest({...loginRequest, [valueFrom]: e.target.value})
     }
-    const     currentView = () => {
+    const    currentView = () => {
             switch(currentViewMode) {
                 case "signUp":
                     return (
@@ -127,10 +123,15 @@ export default function Login(){
             }
         }
 
-
+    useEffect(()=>{
+         if (loggedInUser == null){
+             setAlert({show: true,message: 'Oturum süreniz doldu!'})
+         }
+     },[])
     console.log(`user ${loginRequest.userName} and pass ${loginRequest.userPassword}`)
-            return (
 
+
+            return (
                 <div className={"login-top"}>
                     <AppBackDrop show = {showLoading} />
                     <AppAlert error = {true} message={loginAlert.message} show = {loginAlert.show} setAlert={setAlert} />

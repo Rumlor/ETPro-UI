@@ -8,8 +8,11 @@ import Product from "./product/Product";
 import MarketPlace from "./marketplace/MarketPlace";
 import MarketPlaceAdd from "./marketplace/MarketPlaceAdd";
 import Login from "./security/Login";
+import {loginServiceObject} from "../services/LoginService";
 function App() {
-
+    const authenticatedUser = loginServiceObject.getAuthenticatedUserService();
+    console.log('authenticated user')
+    console.log(authenticatedUser);
     return (
         <BrowserRouter>
             <>
