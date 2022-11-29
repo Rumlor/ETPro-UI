@@ -1,6 +1,6 @@
 
 import React from "react";
-import Navbar from "./navbar/Navbar";
+
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import "./App.css"
 import Home from "./pages/Home"
@@ -9,23 +9,22 @@ import MarketPlace from "./marketplace/MarketPlace";
 import MarketPlaceAdd from "./marketplace/MarketPlaceAdd";
 import Login from "./security/Login";
 import {loginServiceObject} from "../services/LoginService";
+import {AuthenticatedRoute} from "./AuthenticatedRoute";
+import {ComponentWithNav} from "./navbar/ComponentWithNav";
+import NotFound from "./pages/NotFound";
 function App() {
     const authenticatedUser = loginServiceObject.getAuthenticatedUserService();
     console.log('authenticated user')
     console.log(authenticatedUser);
     return (
         <BrowserRouter>
-            <>
-                {
-                    !window.location.pathname.includes("login") ? <Navbar/> : <></>
-                }
-            </>
             <Routes>
-                <Route path={"/"}  element={<Home/>}></Route>
+                <Route path={"*"}  element={<NotFound/>}></Route>
                 <Route path={"/login"}  element={<Login/>}></Route>
-                <Route path={"/marketplaces/list"}  element={<MarketPlace/>}></Route>
-                <Route path={"/marketplaces/add"} element={<MarketPlaceAdd/>}></Route>
-                <Route path={"/products"} element={<Product/>}></Route>
+                <Route path={"/"}  element={<AuthenticatedRoute component={<ComponentWithNav  component={<Home/>} />} />}></Route>
+                <Route path={"/marketplaces/list"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<MarketPlace/>} />} />}></Route>
+                <Route path={"/marketplaces/add"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<MarketPlaceAdd/>} />} />}></Route>
+                <Route path={"/products"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<Product/>} />} />}></Route>
             </Routes>
         </BrowserRouter>
     );
