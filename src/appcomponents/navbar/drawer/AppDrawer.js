@@ -13,12 +13,25 @@ export default function AppDrawer(props){
     const [toggleClass,setToggleClass] = useState('small')
     const  navigator = useNavigate();
     const getClick = () => {
-        if(props.item.title!=='Ana Sayfa')
+        console.log('on get click')
+        if(props.item.title!=='Ana Sayfa'){
             setToggleDrawer(true);
+        }
         else{
             navigator('/')
             window.location.reload()
         }
+    }
+    function getSubClick(url) {
+        console.log('on get sub click')
+        if(url !== '/logout'){
+            navigator(url)
+        }
+        else {
+            loginServiceObject.logoutService();
+            navigator("/login");
+        }
+        //window.location.reload();
     }
     function chooseIcon(title) {
         switch (title){
@@ -50,18 +63,7 @@ export default function AppDrawer(props){
                 return (<Settings/>)
         }
     }
-    function getSubClick(url) {
-        if(url !== '/logout'){
-            navigator(url)
-            window.location.reload()
-        }
-        else {
-            loginServiceObject.logoutService();
-            navigator("/login");
-            window.location.reload();
-        }
 
-    }
 
     return (
         <div className={'drawer-list'}>

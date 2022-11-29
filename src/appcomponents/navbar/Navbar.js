@@ -26,7 +26,7 @@ export default function Navbar(){
                             {
 
                                 Menulist.map((item,index)=>
-                                    <AppDrawer item = {item}/>
+                                    <AppDrawer item = {item} />
                                 )
                             }
                         </ul>
