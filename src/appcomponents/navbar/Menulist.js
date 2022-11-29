@@ -10,15 +10,39 @@ export const Menulist = [
                 {
                     title:"Pazar Yeri Listele",
                     url:"/marketplaces/list"
+                },
+                {
+                    title:"Satış Yardımcısı",
+                    url:"/marketplaces/tool"
                 }
             ]
     },
     {
         title:"Ürünler",
-        url:"/products"
+        url:"/products",
+        subMenus: [
+            {
+                title: "Ürünler",
+                url: "/products"
+            }
+        ]
     },
     {
         title:"Ana Sayfa",
         url:"/"
+    },
+    {
+        title:"Kullanıcı",
+        url:"/user",
+        subMenus: [
+            {
+                title: "Çıkış Yap",
+                url: "/logout"
+            },
+            {
+                title: "Kullanıcı Ayarları",
+                url: "/info"
+            }
+        ]
     }
 ];

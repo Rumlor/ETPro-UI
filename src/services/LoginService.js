@@ -18,8 +18,7 @@ const getAuthenticatedUserService = ()=>{
 
 function onSuccessLogin(response,compSuccess) {
      console.log('successful login')
-    const authenticatedUser =  response.object;
-    localStorage.setItem("authenticatedUser",authenticatedUser.token);
+    localStorage.setItem("authenticatedUser",JSON.stringify(response.object));
     compSuccess(response)
 }
 

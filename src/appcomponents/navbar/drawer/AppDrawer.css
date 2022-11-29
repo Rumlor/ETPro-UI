@@ -1,0 +1,9 @@
+.small:hover {
+    color: black;
+    transition: ease-in 200ms;
+}
+.large:hover{
+    transform: scale(1.5,1.5);
+    color: white;
+    transition: ease-in 200ms;
+}

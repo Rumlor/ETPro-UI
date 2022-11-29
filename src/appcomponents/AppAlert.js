@@ -20,7 +20,7 @@ export default function AppAlert(props){
                 <div style={{justifyContent:'center'}}>
                     {
 
-                        <Alert variant={"filled"} severity={"error"} sx={{display:'flex',justifyContent:'center'}}  color={props.error?'error':'success'} className={"alert-success"}>
+                        <Alert variant={"filled"} severity={"error"} sx={{display:'flex',justifyContent:'center',height:50}}  color={props.error?'error':'success'} className={"alert-success"}>
                             {
                                 <p>{props.message}</p>
                             }

@@ -19,10 +19,13 @@ import {
 import TableCollapsibleRow from "./TableCollapsibleRow";
 import {GET_MARKETPLACES} from "../../api/MarketplaceApi";
 import {CSSTransition} from "react-transition-group";
+import {useNavigate} from "react-router-dom";
+import {loginServiceObject} from "../../services/LoginService";
 
 function MarketPlace() {
 
     //data is fed here.
+const navigator = useNavigate();
 const [marketPlaces,setMarketPlaces] = useState([]);
 const [updateFlag,setUpdateFlag] = useState(true)
 const [showApiFail,setShowApiFail] = useState(false)
@@ -58,15 +61,21 @@ function onApiSuccess(response){
 function onApiFail(response){
     console.log('fail response from /get')
     console.log(response)
-    setApiMessage(response.message)
-    //close loading screen
-    setShowLoadingScreen(false)
-    // close api success  flag
-    setShowApiSuccess(false)
-    // open api fail flag
-    setShowApiFail(true)
-    //open transition wrapper
-    setToggleTransition(true)
+    if (response.object != null && response.object !== 'RELOGIN_REQUIRED'){
+            setApiMessage(response.message)
+            //close loading screen
+            setShowLoadingScreen(false)
+            // close api success  flag
+            setShowApiSuccess(false)
+            // open api fail flag
+            setShowApiFail(true)
+            //open transition wrapper
+            setToggleTransition(true)
+    } else {
+        loginServiceObject.logoutService();
+        navigator("/login");
+        window.location.reload();
+    }
 }
 
 console.log('update flag')
