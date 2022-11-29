@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Box, Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
 import {Inventory, Logout, Person, Store} from "@mui/icons-material";
-import {Add, Home, Settings, ViewList} from "@material-ui/icons";
+import {Add, CompareArrowsRounded, Home, Settings, ViewList} from "@material-ui/icons";
 import "./AppDrawer.css"
 import {useNavigate} from "react-router-dom";
 import {loginServiceObject} from "../../../services/LoginService";
@@ -61,6 +61,8 @@ export default function AppDrawer(props){
                 return (<Logout/>)
             case "Kullanıcı Ayarları":
                 return (<Settings/>)
+            case "Satış Yardımcısı":
+                return (<CompareArrowsRounded/>)
         }
     }
 
