@@ -1,0 +1,9 @@
+.small {
+    color: black;
+    transition: ease-out 100ms;
+}
+.large {
+    transform: scale(1.5,1.5);
+    color: white;
+    transition: ease-in 100ms;
+}

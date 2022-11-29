@@ -15,10 +15,30 @@ export const Menulist = [
     },
     {
         title:"Ürünler",
-        url:"/products"
+        url:"/products",
+        subMenus: [
+            {
+                title: "Ürünler",
+                url: "/products"
+            }
+        ]
     },
     {
         title:"Ana Sayfa",
         url:"/"
+    },
+    {
+        title:"Kullanıcı",
+        url:"/user",
+        subMenus: [
+            {
+                title: "Çıkış Yap",
+                url: "/logout"
+            },
+            {
+                title: "Kullanıcı Ayarları",
+                url: "/info"
+            }
+        ]
     }
 ];
