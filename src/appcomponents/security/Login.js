@@ -34,7 +34,7 @@ export default function Login(){
         if (loginRequest.userName != null && loginRequest.userPassword != null) {
                 setShowLoading(true)
                 loginServiceObject.loginService(loginRequest.userName, loginRequest.userPassword, onSuccessLogin, onFailLogin);
-        }
+            }
         else
             setAlert({show: true,message: 'Lütfen tüm alanları girdiğinizden emin olunuz.'})
     }
@@ -80,7 +80,7 @@ export default function Login(){
                                 <legend>Giriş Yap</legend>
                                 <ul>
                                     <li>
-                                        <label  for="username">Kullanıcı Adı:</label>
+                                        <label  for="username">Kullanıcı:</label>
                                         <input  onChange={e=>onChangeField(e,"userName")} type="text" id="username" required/>
                                     </li>
                                     <li>

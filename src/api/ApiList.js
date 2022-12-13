@@ -26,6 +26,7 @@ export const API = [
             }
         ]
     },
+    
     {
         "origin":"http://localhost:6161/api/",
         "name":"product",
@@ -42,6 +43,7 @@ export const API = [
             }
         ]
     },
+    
     {
         "origin":"http://localhost:6161/api/",
         "name":"authentication",
@@ -55,6 +57,18 @@ export const API = [
                 operation: "login",
                 httpMethod: "post",
                 url:"auth/sign-in"
+            }
+        ]
+    },
+    
+    {
+        "origin": 'http://localhost:6161/api/',
+        'name':'jobMerchantParameter',
+        "apis":[
+            {
+                operation: 'submit',
+                httpMethod: 'post',
+                url: 'job/merchantparameter'
             }
         ]
     }
