@@ -1,7 +1,8 @@
-import { useState } from "react"
-import { POST_PARAMETER } from "../../api/JobApi"
+import { useEffect, useState } from "react"
+import { DELETE_PARAMETER, GET_PARAMETERS, POST_PARAMETER } from "../../api/JobApi"
 import AppAlert from "../AppAlert"
 import "./MarketPlaceTool.css"
+import $ from 'jquery'
 export default function MarketPlaceTool(){
 
     const initialState = {
@@ -14,8 +15,16 @@ export default function MarketPlaceTool(){
         productAmountUpperBound:'',
         marketPlaceType:'TRENDYOL'
     }
+    const [updateFlag,setUpdateFlag] = useState(true);
+    const [fetchedMerchantProductParameters,setFetchedMerchantProductParameters] = useState(null);
     const [merchantProductParameter,setMerchantProductParameter] = useState(initialState)
     const [toolAlert,setToolAlert] = useState({show:false,message:null,error:true})
+    useEffect(()=>{
+        if(updateFlag){
+            GET_PARAMETERS(onSuccessFetch,onFailFetch);
+            setUpdateFlag(false);
+        }
+    },[updateFlag]);
     const onChange = (target,value) =>{
         setMerchantProductParameter({...merchantProductParameter,[target]:value})
     }
@@ -27,22 +36,37 @@ export default function MarketPlaceTool(){
             merchantProductParameter.productUrl.length > 0 &&
             parseFloat(merchantProductParameter.toleranceAmount) > 0
     }
-    function onSuccess(res){
+    function onSuccessPost(res){
         console.log(res);
+        setUpdateFlag(true);
         setToolAlert({show:true,message: 'Başarıyla Kaydedildi.',error:false})   
     }
-    function onFail(res){
+    function onSuccessFetch(res){
+        console.log('SUCCESS FETCH')
+        console.log(res)
+        setFetchedMerchantProductParameters(res.object);
+    }
+    function onSuccessDelete(res){
+        console.log('succesful delete');
+        setUpdateFlag(true);
+        setToolAlert({show:true,message: 'Başarıyla Silindi.',error:false}) 
+    }
+    function onFailPost(res){
         console.log(res);
         setToolAlert({show:true,message: 'Hata',error:true})   
     }
+    function onFailFetch(res){
+        console.log('FAILED FETCH')
+        console.log(res)
+    }
+    function onFailedDelete(res){
 
-
-    console.log(merchantProductParameter);
+    }
     const submit = ()=>{
 
         if (validated()){
                 console.log('validation successful')
-                POST_PARAMETER(merchantProductParameter,onSuccess,onFail);
+                POST_PARAMETER(merchantProductParameter,onSuccessPost,onFailPost);
             }
         else
             setToolAlert({show:true,message: 'Lütfen Tüm alanları girdiğinizden emin olunuz!',error:true})    
@@ -50,7 +74,14 @@ export default function MarketPlaceTool(){
 
 
     }
-
+    const submitDeleteParameter=(index)=>{
+        const productCode =  document.getElementById(`row_${index}-product-code`).innerText;
+        const marketPlaceType = document.getElementById(`row_${index}-market-place-type`).innerText;
+        console.log(`deleting ${productCode} with market place type ${marketPlaceType}`);
+        DELETE_PARAMETER(productCode,marketPlaceType,onSuccessDelete,onFailedDelete);
+    }
+    console.log(merchantProductParameter);
+    console.log(fetchedMerchantProductParameters);
     return (
 
         <div className="root">
@@ -95,7 +126,67 @@ export default function MarketPlaceTool(){
                 <button  type="button" className="button" onClick={submit}>Kaydet</button>
                 <button type="button" className="button clear" onClick={()=>setMerchantProductParameter(initialState)}>Temizle</button>
             </form>
-            
+            <div className="parameterTable">
+                <table>
+                   <tr>
+                        <th>Satici Platform ID</th>
+                        <th>Barkod Kodu</th>
+                        <th>Ürün Linki</th>
+                        <th>Fiyat Aralığı</th>
+                        <th>Min Rekabet Fiyatı</th>
+                        <th>Max Rekabet Fiyatı</th>
+                        <th>Pazar Yeri</th>
+                        <th></th>
+                    </tr>
+                        {
+                           fetchedMerchantProductParameters != null? fetchedMerchantProductParameters.map((item,index)=>{
+                                return (
+                                    <tr id={`row_${index}`} index={index}>
+                                       <td>
+                                        {
+                                            item.merchantId
+                                        }
+                                        </td>
+                                        <td id={`row_${index}-product-code`}>
+                                        {
+                                            item.productCode
+                                        }    
+                                        </td>
+                                        <td>
+                                            {
+                                                item.productUrl
+                                            }
+                                        </td>
+                                        <td>
+                                            {
+                                                item.toleranceAmount
+                                            }
+                                        </td>
+                                        <td>
+                                            {
+                                                item.productAmountLowerBound
+                                            }
+                                        </td>
+                                        <td>
+                                            {
+                                                item.productAmountUpperBound
+                                            }
+                                        </td>
+                                        <td id={`row_${index}-market-place-type`}>
+                                            {
+                                                item.marketPlaceType
+                                            }
+                                        </td>
+                                        <td>
+                                        <button type="button" className="button clear" onClick={()=>submitDeleteParameter(index)}>Sil</button>
+                                        </td>
+                                    </tr>
+                                    
+                                )
+                            }) : <></>
+                        }
+                </table>
+            </div>
         </div>
     )
 }

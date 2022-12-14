@@ -69,6 +69,16 @@ export const API = [
                 operation: 'submit',
                 httpMethod: 'post',
                 url: 'job/merchantparameter'
+            },
+            {
+                operation: 'fetch',
+                httpMethod: 'get',
+                url: 'job/merchantparameters'
+            },
+            {
+                operation: 'delete',
+                httpMethod: 'delete',
+                url: `job/merchantparameters/`
             }
         ]
     }
