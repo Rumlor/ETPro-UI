@@ -1,6 +1,7 @@
 import {API} from "./ApiList.js"
 import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderService";
 import { createUrlWithPathParams } from "./ApiUtils.js";
+import { loginServiceObject } from "../services/LoginService.js";
 
 export const POST_PARAMETER = (body,onSuccessComponent,onFailComponent)=>{
     const method = API[3].apis[0].httpMethod;
@@ -26,6 +27,7 @@ export const GET_PARAMETERS = (onSuccessComponent,onFailComponent)=>{
         if (response.result){
             onSuccessComponent(response)
         } else {
+            loginServiceObject.navigateToLogin(response)
             onFailComponent(response)
         }
     })

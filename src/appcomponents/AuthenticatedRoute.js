@@ -1,12 +1,12 @@
-import {Navigate, Route} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import {loginServiceObject} from "../services/LoginService";
 
-export  const AuthenticatedRoute = ({component:Component}) =>{
+export  const AuthenticatedRoute = ({component}) =>{
 
     return (
         <>
             {
-                loginServiceObject.getAuthenticatedUserService() ? Component : <Navigate to={{pathname:'/login'}} />
+                loginServiceObject.getAuthenticatedUserService() ? component : <Navigate to={{pathname:'/login'}} />
             }
         </>
     )

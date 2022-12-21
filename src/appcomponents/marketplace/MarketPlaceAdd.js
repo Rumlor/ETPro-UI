@@ -9,6 +9,7 @@ import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
 
 import  {POST_MARKETPLACE} from "../../api/MarketplaceApi";
 import {CSSTransition} from "react-transition-group";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -38,17 +39,22 @@ export default function MarketPlaceAdd(){
     const addCommission = ()=>{setCommissionCounter(commissionCounter+1)};
     const addShipment = ()=>{setShipmentCounter(shipmentCounter+1)};
     const resetAll = ()=>{setCommissionCounter(0);setShipmentCounter(0);setMarketPlace(initial); setCommissionIndexArrayForDeleted([]);setShipmentIndexArrayForDeleted([]); platformNameRef.current.value = ''}
-
+    const navigator = useNavigate();
 function onApiFail(response){
-    setShowLoadingScreen(false);
-    setShowApiFail(true)
-    console.log(response)
-    if (response.errorMessage === undefined)
-    {
-        response.errorMessage = 'Server Bağlantısı sağlanamadı. Lütfen daha sonra tekrar deneyiniz.'
+    if (response.object === 'RELOGIN_REQUIRED'){
+        navigator("/login");
+    } 
+    else {
+        setShowLoadingScreen(false);
+        setShowApiFail(true)
+        console.log(response)
+        if (response.errorMessage === undefined)
+        {
+            response.errorMessage = 'Server Bağlantısı sağlanamadı. Lütfen daha sonra tekrar deneyiniz.'
+        }
+        setToggleTransition(true)
+        setShowFailMessage(response.errorMessage)
     }
-    setToggleTransition(true)
-    setShowFailMessage(response.errorMessage)
 }
 function onApiSuccess(response){
         //clear previous state from previous api call

@@ -81,5 +81,16 @@ export const API = [
                 url: `job/merchantparameters/`
             }
         ]
+    },
+    
+    {
+        "origin": 'http://localhost:6161/api/',
+        "apis":[
+            {
+                operation: 'fetch',
+                httpMethod: 'get',
+                url: 'statistic/getDashboardStatistics'
+            }
+        ]
     }
 ]

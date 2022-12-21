@@ -12,3 +12,6 @@
     opacity: 0;
     transition: ease-out 500ms;
 }
+.alert{
+    width: 100vw;
+}
