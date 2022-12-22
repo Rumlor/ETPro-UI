@@ -79,6 +79,11 @@ export const API = [
                 operation: 'delete',
                 httpMethod: 'delete',
                 url: `job/merchantparameters/`
+            },
+            {
+                operation: 'patch',
+                httpMethod: 'PATCH',
+                url: `job/merchantparameters/update`
             }
         ]
     },

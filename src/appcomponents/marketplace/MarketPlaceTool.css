@@ -14,6 +14,10 @@
 .clear{
     background-color: brown;
 }
+.quit {
+    background-color: grey;
+    padding-top: 10px;
+}
 .button:hover {
     background-color: green; /* Green */
     color: white;

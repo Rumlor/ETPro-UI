@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { DELETE_PARAMETER, GET_PARAMETERS, POST_PARAMETER } from "../../api/JobApi"
+import { DELETE_PARAMETER, GET_PARAMETERS, POST_PARAMETER, QUIT_TRACKING_PARAMETER, UPDATE_TRACKING_PARAMETER } from "../../api/JobApi"
 import AppAlert from "../AppAlert"
 import "./MarketPlaceTool.css"
 import '../pages/css/tailwind.css'
 import '../pages/css/tailwind.output.css'
+import { createUrlWithQueryParams } from "../../api/ApiUtils"
 export default function MarketPlaceTool(){
 
     const initialState = {
@@ -40,6 +41,14 @@ export default function MarketPlaceTool(){
         console.log(res);
         setUpdateFlag(true);
         setToolAlert({show:true,message: 'Başarıyla Kaydedildi.',error:false})   
+    }
+    function onSuccessUpdate(res){
+      console.log(res);
+      setUpdateFlag(true);
+      setToolAlert({show:true,message: 'Başarıyla Pasifleştirildi.',error:false})  
+    }
+    function onFailedUpdate(res){
+      
     }
     function onSuccessFetch(res){
         console.log('SUCCESS FETCH')
@@ -78,13 +87,18 @@ export default function MarketPlaceTool(){
       setMerchantProductParameter(initialState);
     }
     const submitDeleteParameter=(index)=>{
-        const productCode =  document.getElementById(`row_${index}-product-code`).innerText;
-        const marketPlaceType = document.getElementById(`row_${index}-market-place-type`).innerText;
-        console.log(`deleting ${productCode} with market place type ${marketPlaceType}`);
+        const { productCode, marketPlaceType } = getProductCodeAndMarketPlaceForIndex(index)
         DELETE_PARAMETER(productCode,marketPlaceType,onSuccessDelete,onFailedDelete);
     }
+    const submitTrackingUpdate = (index,isTracked) =>{
+      const queryMap = new Map();
+      const {productCode,marketPlaceType} = getProductCodeAndMarketPlaceForIndex(index);
+      queryMap.set('isTracked',isTracked)
+      queryMap.set('productCode',productCode)
+      queryMap.set('marketPlaceType',marketPlaceType)
+      UPDATE_TRACKING_PARAMETER(queryMap,onSuccessUpdate,onFailedUpdate);
+    }
     console.log(merchantProductParameter);
-    console.log(fetchedMerchantProductParameters);
     return (
 
         <div className="root">
@@ -186,11 +200,13 @@ export default function MarketPlaceTool(){
                    <tr>
                         <th>Satici Platform ID</th>
                         <th>Barkod Kodu</th>
+                        <th>Durum</th>
                         <th>Ürün Linki</th>
                         <th>Fiyat Aralığı</th>
                         <th>Min Rekabet Fiyatı</th>
                         <th>Max Rekabet Fiyatı</th>
                         <th>Pazar Yeri</th>
+                        <th></th>
                         <th></th>
                     </tr>
                         {
@@ -206,6 +222,11 @@ export default function MarketPlaceTool(){
                                         {
                                             item.productCode
                                         }    
+                                        </td>
+                                        <td>
+                                            {
+                                                item.isTracked ? "Aktif":"Pasif"
+                                            }
                                         </td>
                                         <td>
                                             {
@@ -233,7 +254,10 @@ export default function MarketPlaceTool(){
                                             }
                                         </td>
                                         <td>
-                                        <button type="button" className="button clear" onClick={()=>submitDeleteParameter(index)}>Sil</button>
+                                          <button type="button" className="button clear" onClick={()=>submitDeleteParameter(index)}>Sil</button>
+                                        </td>
+                                        <td>
+                                          <button type="button" className="button quit"  onClick={()=>submitTrackingUpdate(index,!item.isTracked)}>{item.isTracked?"Takibi Bırak":"Takip Et"}</button>
                                         </td>
                                     </tr>
                                     
@@ -244,4 +268,10 @@ export default function MarketPlaceTool(){
             </div>
         </div>
     )
+
+  function getProductCodeAndMarketPlaceForIndex(index) {
+    const productCode = document.getElementById(`row_${index}-product-code`).innerText
+    const marketPlaceType = document.getElementById(`row_${index}-market-place-type`).innerText
+    return { productCode, marketPlaceType }
+  }
 }
