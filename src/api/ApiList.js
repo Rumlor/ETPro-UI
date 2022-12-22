@@ -1,101 +1,66 @@
 
-export const API = [
-    {
-        "origin": "http://localhost:6161/api/",
-        "name": "marketplace",
-        "apis": [
-            {
-                "operation": "add",
-                "httpMethod": "post",
-                "url": "marketplace/add"
-            },
-            {
-                operation: "get",
-                httpMethod: "get",
-                url: "marketplace/get"
-            },
-            {
-                operation: "delete",
-                httpMethod: "delete",
-                url: 'marketplace/delete/'
-            },
-            {
-                operation: "update",
-                httpMethod: "put",
-                url: "marketplace/put"
-            }
-        ]
+export const apiOrigin = "http://localhost:6161/api/"
+export const globalApiWrapper = {
+    authenticationApi : {
+        login: {
+            httpMethod: "POST",
+            url: apiOrigin + "auth/sign-in"
+        },
+        register : {
+            httpMethod: "POST",
+            url: apiOrigin + "auth/signup"
+        }
     },
-    
-    {
-        "origin":"http://localhost:6161/api/",
-        "name":"product",
-        "apis":[
-            {
-                operation: "get",
-                httpMethod: "post",
-                url: "product/calculate"
-            },
-            {
-                operation: "export",
-                httpMethod: "post",
-                url: "product/export"
-            }
-        ]
+    marketPlaceApi : {
+        addMarketPlace: {
+            httpMethod: "POST",
+            url : apiOrigin + "marketplace/add"
+        },
+        getMarketPlaceList :{
+            httpMethod: "GET",
+            url : apiOrigin + "marketplace/get"
+        },
+        deleteMarketPlace : {
+            httpMethod: "DELETE",
+            url :  apiOrigin + "marketplace/delete"
+        },
+        updateMarketPlace : {
+            httpMethod : 'PUT',
+            url : apiOrigin + 'marketplace/put'
+        }
     },
-    
-    {
-        "origin":"http://localhost:6161/api/",
-        "name":"authentication",
-        "apis":[
-            {
-                operation: "register",
-                httpMethod: "post",
-                url:"auth/signup"
-            },
-            {
-                operation: "login",
-                httpMethod: "post",
-                url:"auth/sign-in"
-            }
-        ]
+    productApi: {
+        calculateProduct : {
+            httpMethod: "POST",
+            url: apiOrigin + "product/calculate"
+        },
+        exportProduct : {
+            httpMethod: "POST",
+            url: apiOrigin + "product/export"
+        }
     },
-    
-    {
-        "origin": 'http://localhost:6161/api/',
-        'name':'jobMerchantParameter',
-        "apis":[
-            {
-                operation: 'submit',
-                httpMethod: 'post',
-                url: 'job/merchantparameter'
-            },
-            {
-                operation: 'fetch',
-                httpMethod: 'get',
-                url: 'job/merchantparameters'
-            },
-            {
-                operation: 'delete',
-                httpMethod: 'delete',
-                url: `job/merchantparameters/`
-            },
-            {
-                operation: 'patch',
-                httpMethod: 'PATCH',
-                url: `job/merchantparameters/update`
-            }
-        ]
+    statisticApi : {
+        getDashboardStatistics: {
+            httpMethod : 'GET',
+            url : apiOrigin + 'statistic/getDashboardStatistics'
+        }
     },
-    
-    {
-        "origin": 'http://localhost:6161/api/',
-        "apis":[
-            {
-                operation: 'fetch',
-                httpMethod: 'get',
-                url: 'statistic/getDashboardStatistics'
-            }
-        ]
+    jobApi:{
+        getParameters:{
+            httpMethod: 'GET',
+            url: apiOrigin + 'job/merchantparameters'
+        },
+        addParameter : {
+            httpMethod: 'POST',
+            url: apiOrigin + 'job/merchantparameter'
+        },
+        deleteParameter : {
+            httpMethod: 'DELETE',
+            url: apiOrigin + 'job/merchantparameters'
+        },
+        updateParameter : {
+            httpMethod : 'PATCH',
+            url: apiOrigin + `job/merchantparameters/update`
+        }
     }
-]
+}
