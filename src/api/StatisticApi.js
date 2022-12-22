@@ -1,10 +1,10 @@
-import {API} from "./ApiList.js"
-import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderService";
+import {API, globalApiWrapper} from "./ApiList.js"
+import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHeaderAndMiscService";
 
 export const GET_STATISTICS = (onSuccessComponent,onFailComponent)=>{
-    const method = API[4].apis[0].httpMethod;
-    const reqOptions = prepareRequestOptions(method,{...getAuthenticatedUserHeaderFromLocalStorage(),...{'Content-Type':'application/json'}},null);
-    fetch(API[4].origin.concat(API[4].apis[0].url),reqOptions)
+    const getStatistics = globalApiWrapper.statisticApi.getDashboardStatistics;
+    const reqOptions = prepareRequestOptions(getStatistics.httpMethod,getHttpHeaderWithToken(),null);
+    fetch(getStatistics.url,reqOptions)
     .then(response=>response.json())
     .then((response)=> {
         if (response.result){
@@ -16,12 +16,3 @@ export const GET_STATISTICS = (onSuccessComponent,onFailComponent)=>{
     .catch(reason => onFailComponent(reason))
 }
 
-function  prepareRequestOptions(httpMethod,httpHeaders,body){
-    console.log(`method ${httpMethod},headers:${httpHeaders} ,body:${body}`)
-    return   {
-        method:httpMethod !== null ? httpMethod : null,
-        headers:httpHeaders !== null ? httpHeaders: null,
-        body: body!== null ? JSON.stringify(body) : null
-    }
-
-}
