@@ -79,6 +79,22 @@ export const API = [
                 operation: 'delete',
                 httpMethod: 'delete',
                 url: `job/merchantparameters/`
+            },
+            {
+                operation: 'patch',
+                httpMethod: 'PATCH',
+                url: `job/merchantparameters/update`
+            }
+        ]
+    },
+    
+    {
+        "origin": 'http://localhost:6161/api/',
+        "apis":[
+            {
+                operation: 'fetch',
+                httpMethod: 'get',
+                url: 'statistic/getDashboardStatistics'
             }
         ]
     }

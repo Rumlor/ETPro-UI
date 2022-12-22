@@ -1,6 +1,7 @@
 import {API} from "./ApiList.js"
 import getAuthenticatedUserHeaderFromLocalStorage from "../services/HeaderService";
-import { createUrlWithPathParams } from "./ApiUtils.js";
+import { createUrlWithPathParams, createUrlWithQueryParams } from "./ApiUtils.js";
+import { loginServiceObject } from "../services/LoginService.js";
 
 export const POST_PARAMETER = (body,onSuccessComponent,onFailComponent)=>{
     const method = API[3].apis[0].httpMethod;
@@ -26,6 +27,7 @@ export const GET_PARAMETERS = (onSuccessComponent,onFailComponent)=>{
         if (response.result){
             onSuccessComponent(response)
         } else {
+            loginServiceObject.navigateToLogin(response)
             onFailComponent(response)
         }
     })
@@ -47,6 +49,26 @@ export const DELETE_PARAMETER = (productCode,marketPlaceType,onSuccessComponent,
         }
     })
     .catch(reason => onFailComponent(reason))
+}
+export const UPDATE_TRACKING_PARAMETER = (queryMap,onSuccessComponent,onFailComponent)=>{
+    const method = API[3].apis[3].httpMethod;
+    const urlWithoutPathParameters =  API[3].apis[3].url
+    const queryParamString =  createUrlWithQueryParams(queryMap)
+    const urlWithPathParameters = urlWithoutPathParameters.concat(queryParamString);
+    const finalUrl = API[3].origin.concat(urlWithPathParameters)
+    console.log(finalUrl)
+    const reqOptions =  prepareRequestOptions(method,{...getAuthenticatedUserHeaderFromLocalStorage(),...{'Content-Type':'application/json'}},null);
+    fetch(finalUrl,reqOptions)
+
+        .then(response=>response.json())
+        .then((response)=> {
+            if (response.result){
+                onSuccessComponent(response)
+            } else {
+                onFailComponent(response)
+            }
+        })
+        .catch(reason => onFailComponent(reason))
 }
 function  prepareRequestOptions(httpMethod,httpHeaders,body){
     console.log(`method ${httpMethod},headers:${httpHeaders} ,body:${body}`)

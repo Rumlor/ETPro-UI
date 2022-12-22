@@ -1,3 +1,4 @@
+
 import {POST_LOGIN} from "../api/AuthApi";
 
  const loginService = (userName,password,onSuccessComponent,onFailComponent) => {
@@ -27,6 +28,8 @@ function onFailedLogin(response,compFail) {
     console.log(response)
     compFail(response)
 }
+
+
 
 export const loginServiceObject = {
      loginService,
