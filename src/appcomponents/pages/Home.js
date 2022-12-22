@@ -146,6 +146,7 @@ function Home(){
                       class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
                     >
                       <th class="px-4 py-3">Ürün</th>
+                      <th class="px-4 py-3">Pazar Yeri</th>
                       <th class="px-4 py-3">Mevcut Fiyat</th>
                       <th class="px-4 py-3">Güncelleme Tarihi</th>
                       <th class="px-4 py-3" style={{textAlign:'right'}}></th>
@@ -166,10 +167,13 @@ function Home(){
                             </div>
                           </td>
                           <td class="px-4 py-3 text-sm">
+                            {item.marketPlaceType}
+                          </td>
+                          <td class="px-4 py-3 text-sm">
                             {item.currentAmount}
                           </td>
                           <td  class="px-4 py-3 text-sm">
-                            6/10/2020
+                            {item.modifyDate}
                           </td>
                           <td style={{alignItems:'right'}}class="px-4 py-3">
                             <div class="flex items-center space-x-4 text-sm">
