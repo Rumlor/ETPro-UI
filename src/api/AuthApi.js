@@ -1,8 +1,11 @@
 import { prepareRequestOptions ,getHttpHeaderWithToken} from "../services/HttpHeaderAndMiscService";
 import {API, globalApiWrapper} from "./ApiList";
 
+
+const {login,register} = globalApiWrapper.authenticationApi
+
+
 export const POST_LOGIN = (body,onSuccess,onFail,onSuccessComponent,onFailComponent)=>{
-    const login = globalApiWrapper.authenticationApi.login; 
     const reqOptions =  prepareRequestOptions(login.httpMethod,getHttpHeaderWithToken(),body)
     fetch(login.url,reqOptions)
         .then(response=>response.json())
