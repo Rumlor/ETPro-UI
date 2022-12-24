@@ -45,7 +45,7 @@ export default function MarketPlaceTool(){
     function onSuccessUpdate(res){
       console.log(res);
       setUpdateFlag(true);
-      setToolAlert({show:true,message: 'Başarıyla Pasifleştirildi.',error:false})  
+      setToolAlert({show:true,message: 'Başarıyla Güncellendi.',error:false})  
     }
     function onFailedUpdate(res){
       
@@ -199,7 +199,6 @@ export default function MarketPlaceTool(){
                 <span>{ fetchedMerchantProductParameters ? `Takip Edilen Ürün Sayısı:  ${fetchedMerchantProductParameters.filter(element=>element.isTracked).length}` : ''}</span>
                 <table>
                    <tr>
-                        <th>Satici Platform ID</th>
                         <th>Barkod Kodu</th>
                         <th>Durum</th>
                         <th>Ürün Linki</th>
@@ -213,12 +212,7 @@ export default function MarketPlaceTool(){
                         {
                            fetchedMerchantProductParameters != null? fetchedMerchantProductParameters.map((item,index)=>{
                                 return (
-                                    <tr id={`row_${index}`} index={index}>
-                                       <td>
-                                        {
-                                            item.merchantId
-                                        }
-                                        </td>
+                                    <tr style={!item.isTracked?{background:'#BA2D1B'}:{}} id={`row_${index}`} index={index}>
                                         <td id={`row_${index}-product-code`}>
                                         {
                                             item.productCode
