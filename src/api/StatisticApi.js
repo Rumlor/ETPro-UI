@@ -1,12 +1,12 @@
 import {API, globalApiWrapper} from "./ApiList.js"
 import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHeaderAndMiscService";
 
-const {getStatistics} = globalApiWrapper.statisticApi
+const {getDashboardStatistics} = globalApiWrapper.statisticApi
 
 
 export const GET_STATISTICS = (onSuccessComponent,onFailComponent)=>{
-    const reqOptions = prepareRequestOptions(getStatistics.httpMethod,getHttpHeaderWithToken(),null);
-    fetch(getStatistics.url,reqOptions)
+    const reqOptions = prepareRequestOptions(getDashboardStatistics.httpMethod,getHttpHeaderWithToken(),null);
+    fetch(getDashboardStatistics.url,reqOptions)
     .then(response=>response.json())
     .then((response)=> {
         if (response.result){
