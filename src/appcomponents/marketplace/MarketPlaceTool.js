@@ -196,6 +196,7 @@ export default function MarketPlaceTool(){
                           
             </div>
             <div className="parameterTable">
+                <span>{ fetchedMerchantProductParameters ? `Takip Edilen Ürün Sayısı:  ${fetchedMerchantProductParameters.filter(element=>element.isTracked).length}` : ''}</span>
                 <table>
                    <tr>
                         <th>Satici Platform ID</th>
