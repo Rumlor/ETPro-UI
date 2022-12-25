@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
-import { DELETE_PARAMETER, GET_PARAMETERS, POST_PARAMETER, QUIT_TRACKING_PARAMETER, UPDATE_TRACKING_PARAMETER } from "../../api/JobApi"
 import AppAlert from "../AppAlert"
 import "./MarketPlaceTool.css"
 import '../pages/css/tailwind.css'
 import '../pages/css/tailwind.output.css'
-import { createUrlWithQueryParams } from "../../api/ApiUtils"
+import { apiDelegateService } from "../../api/ApiDelegateService"
 export default function MarketPlaceTool(){
-
+    const {updateParameter,getParameters,deleteParameter,postParameter} = apiDelegateService.parameterApi;
     const initialState = {
         merchantId:null,
         productCode:'',
@@ -22,8 +21,9 @@ export default function MarketPlaceTool(){
     const [merchantProductParameter,setMerchantProductParameter] = useState(initialState)
     const [toolAlert,setToolAlert] = useState({show:false,message:null,error:true})
     useEffect(()=>{
+        
         if(updateFlag){
-            GET_PARAMETERS(onSuccessFetch,onFailFetch);
+            getParameters({success:onSuccessFetch,fail:onFailFetch});
             setUpdateFlag(false);
         }
     },[updateFlag]);
@@ -75,7 +75,7 @@ export default function MarketPlaceTool(){
 
         if (validated()){
                 console.log('validation successful')
-                POST_PARAMETER(merchantProductParameter,onSuccessPost,onFailPost);
+                postParameter(merchantProductParameter,{success:onSuccessPost,fail:onFailPost});
             }
         else
             setToolAlert({show:true,message: 'Lütfen Tüm alanları girdiğinizden emin olunuz!',error:true})    
@@ -88,7 +88,7 @@ export default function MarketPlaceTool(){
     }
     const submitDeleteParameter=(index)=>{
         const { productCode, marketPlaceType } = getProductCodeAndMarketPlaceForIndex(index)
-        DELETE_PARAMETER(productCode,marketPlaceType,onSuccessDelete,onFailedDelete);
+        deleteParameter([marketPlaceType,productCode],{success:onSuccessDelete,fail:onFailedDelete});
     }
     const submitTrackingUpdate = (index,isTracked) =>{
       const queryMap = new Map();
@@ -96,9 +96,9 @@ export default function MarketPlaceTool(){
       queryMap.set('isTracked',isTracked)
       queryMap.set('productCode',productCode)
       queryMap.set('marketPlaceType',marketPlaceType)
-      UPDATE_TRACKING_PARAMETER(queryMap,onSuccessUpdate,onFailedUpdate);
+      updateParameter(queryMap,{success:onSuccessUpdate,fail:onFailedUpdate});
     }
-    console.log(merchantProductParameter);
+
     return (
 
         <div className="root">

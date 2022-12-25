@@ -33,9 +33,9 @@ export const GET_PARAMETERS = (onSuccessComponent,onFailComponent)=>{
     })
     .catch(reason => onFailComponent(reason))
 }
-export const DELETE_PARAMETER = (productCode,marketPlaceType,onSuccessComponent,onFailComponent) =>{
+export const DELETE_PARAMETER = (paramArray,onSuccessComponent,onFailComponent) =>{
     const reqOptions = prepareRequestOptions(deleteParameter.httpMethod,getHttpHeaderWithToken(),null);
-    fetch(deleteParameter.url.concat(createUrlWithPathParams(marketPlaceType,productCode)),reqOptions)
+    fetch(deleteParameter.url.concat(createUrlWithPathParams(paramArray)),reqOptions)
     .then(response=>response.json())
     .then((response)=> {
         if (response.result){

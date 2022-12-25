@@ -1,5 +1,5 @@
 
-export const apiOrigin = "http://localhost:6161/api/"
+const apiOrigin = "http://localhost:6161/api/"
 export const globalApiWrapper = {
     authenticationApi : {
         login: {

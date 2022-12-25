@@ -1,5 +1,5 @@
 import {API,globalApiWrapper} from "./ApiList.js"
-
+import { createUrlWithPathParams } from "./ApiUtils.js";
 import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHeaderAndMiscService";
 
    const {addMarketPlace,getMarketPlaceList,deleteMarketPlace,updateMarketPlace} = {...globalApiWrapper.marketPlaceApi};
@@ -18,8 +18,8 @@ import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHead
              })
              .catch(reason => onFail(reason))
     }
-   export const GET_MARKETPLACES = (body,OnSuccess,OnFail) => {
-        const reqOptions  = prepareRequestOptions(getMarketPlaceList.httpMethod,getHttpHeaderWithToken(),body)
+   export const GET_MARKETPLACES = (OnSuccess,OnFail) => {
+        const reqOptions  = prepareRequestOptions(getMarketPlaceList.httpMethod,getHttpHeaderWithToken(),null)
         fetch(getMarketPlaceList.url,reqOptions)
             .then(response=>response.json())
             .then((response)=> {
@@ -31,9 +31,9 @@ import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHead
             })
             .catch(reason => OnFail(reason))
     }
-   export const DELETE_MARKETPLACE = (pathVariable,onSuccess,onFail)=>{
+   export const DELETE_MARKETPLACE = (pathVariables,onSuccess,onFail)=>{
        const reqOptions =  prepareRequestOptions(deleteMarketPlace.httpMethod,getHttpHeaderWithToken(),null);
-       fetch(deleteMarketPlace.url.concat("/").concat(pathVariable),reqOptions)
+       fetch(deleteMarketPlace.url.concat(createUrlWithPathParams(pathVariables)),reqOptions)
            .then(response=>response.json())
            .then((response)=> {
                if (response.result){

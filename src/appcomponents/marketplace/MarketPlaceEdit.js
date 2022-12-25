@@ -1,13 +1,12 @@
-import {Alert, AppBar, Button, Dialog, IconButton, TextField, Toolbar, Typography} from "@mui/material";
+import  {AppBar, Button, Dialog, IconButton, TextField, Toolbar, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import * as React from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import {useReducer, useState} from "react";
-import {PUT_MARKETPLACE} from "../../api/MarketplaceApi";
-import {CSSTransition} from "react-transition-group";
+import {useReducer} from "react";
 import "./MarketPlaceEdit.css"
+import { apiDelegateService } from "../../api/ApiDelegateService";
 export default function MarketPlaceEdit(props){
-
+const {updateMarketPlace} = apiDelegateService.marketPlaceApi;
 function initialValueSupplier() {
     //deep copied marketplace
     const copiedMarketPlace = {...props.marketPlace}
@@ -132,7 +131,7 @@ function putMarketPlace(){
     const body = transformMarketPlace(marketPlace)
         console.log('putting')
         console.log(body)
-    PUT_MARKETPLACE(marketPlace,onSuccess,onFail);
+    updateMarketPlace(body,{success:onSuccess,fail:onFail})
 
 }
 console.log('marketplace in edit')
