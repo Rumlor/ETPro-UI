@@ -4,6 +4,7 @@ import "./MarketPlaceTool.css"
 import '../pages/css/tailwind.css'
 import '../pages/css/tailwind.output.css'
 import { apiDelegateService } from "../../api/ApiDelegateService"
+import ComponentPromiseUtil from "../../api/ComponentPromiseUtil"
 export default function MarketPlaceTool(){
     const {updateParameter,getParameters,deleteParameter,postParameter} = apiDelegateService.parameterApi;
     const initialState = {
@@ -23,7 +24,7 @@ export default function MarketPlaceTool(){
     useEffect(()=>{
         
         if(updateFlag){
-            getParameters({success:onSuccessFetch,fail:onFailFetch});
+           ComponentPromiseUtil.resolveResponse (getParameters(),onSuccessFetch,onFailFetch);
             setUpdateFlag(false);
         }
     },[updateFlag]);
@@ -75,7 +76,7 @@ export default function MarketPlaceTool(){
 
         if (validated()){
                 console.log('validation successful')
-                postParameter(merchantProductParameter,{success:onSuccessPost,fail:onFailPost});
+                ComponentPromiseUtil.resolveResponse(postParameter(merchantProductParameter),onSuccessPost,onFailPost);
             }
         else
             setToolAlert({show:true,message: 'Lütfen Tüm alanları girdiğinizden emin olunuz!',error:true})    
@@ -88,7 +89,7 @@ export default function MarketPlaceTool(){
     }
     const submitDeleteParameter=(index)=>{
         const { productCode, marketPlaceType } = getProductCodeAndMarketPlaceForIndex(index)
-        deleteParameter([marketPlaceType,productCode],{success:onSuccessDelete,fail:onFailedDelete});
+        ComponentPromiseUtil.resolveResponse(deleteParameter([marketPlaceType,productCode]),onSuccessDelete,onFailedDelete);
     }
     const submitTrackingUpdate = (index,isTracked) =>{
       const queryMap = new Map();
@@ -96,7 +97,7 @@ export default function MarketPlaceTool(){
       queryMap.set('isTracked',isTracked)
       queryMap.set('productCode',productCode)
       queryMap.set('marketPlaceType',marketPlaceType)
-      updateParameter(queryMap,{success:onSuccessUpdate,fail:onFailedUpdate});
+      ComponentPromiseUtil.resolveResponse(updateParameter(queryMap),onSuccessUpdate,onFailedUpdate);
     }
 
     return (

@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ThresholdListItem from '../thresholdList/ThresholdListItem'
 import MarketPlaceEdit from "./MarketPlaceEdit";
 import { apiDelegateService } from '../../api/ApiDelegateService';
+import ComponentPromiseUtil from '../../api/ComponentPromiseUtil';
 export default function TableCollapsibleRow(props) {
     const {deleteMarketPlace} = apiDelegateService.marketPlaceApi
     const [open, setOpen] = React.useState(false);
@@ -30,7 +31,7 @@ export default function TableCollapsibleRow(props) {
     const [shipmentIndexForThreshold,setShipmentIndexForThreshold] = useState(null)
     function deleteAction() {
         console.log('platform name to be deleted '+props.marketPlace.platformName)
-        deleteMarketPlace([props.marketPlace.platformName],{success:onSuccessApi,fail:onFailApi});
+        ComponentPromiseUtil.resolveResponse(deleteMarketPlace([props.marketPlace.platformName]),onSuccessApi,onFailApi) ;
         props.setLoadingScreen(true)
     }
     function onSuccessApi(response) {

@@ -10,32 +10,37 @@ import {
         GET_MARKETPLACES as getMarketPlacesApi,
         DELETE_MARKETPLACE as deleteMarketPlaceApi,
         PUT_MARKETPLACE as updateMarketPlaceApi
-    } from "./MarketplaceApi"    
+    } from "./MarketplaceApi"
+    
+ import {POST_LOGIN as postLoginApi} from "./AuthApi"   
 
-const getStatistics = (callBack) => withoutBody(callBack.success,callBack.fail,getStatisticsApi);
+const getStatistics = _ => withoutBody(getStatisticsApi);
 
-const postParameter = (body,callBack) => withBody(body,callBack.success,callBack.fail,postParameterApi);
-const updateParameter = (queryMap,callBack)=>withQueryParam(queryMap,callBack.success,callBack.fail,updateParameterApi)
-const deleteParameter = (params,callBack) => withPathParam(params,callBack.success,callBack.fail,deleteParameterApi);
-const getParameters = (callBack)=> withoutBody(callBack.success,callBack.fail,getParametersApi);
+const postParameter = (body) => withBody(body,postParameterApi);
+const updateParameter = (queryMap)=>withQueryParam(queryMap,updateParameterApi)
+const deleteParameter = (params) => withPathParam(params,deleteParameterApi);
+const getParameters = _ => withoutBody(getParametersApi);
 
 
-const postMarketPlace = (body,callBack) =>withBody(body,callBack.success,callBack.fail,postMarketPlaceApi);
-const updateMarketPlace = (body,callBack)=>withBody(body,callBack.success,callBack.fail,updateMarketPlaceApi);
-const deleteMarketPlace = (params,callBack) =>withPathParam(params,callBack.success,callBack.fail,deleteMarketPlaceApi);
-const getMarketPlaces = (callBack)=>withoutBody(callBack.success,callBack.fail,getMarketPlacesApi)
+const postMarketPlace = (body) =>withBody(body,postMarketPlaceApi);
+const updateMarketPlace = (body)=>withBody(body,updateMarketPlaceApi);
+const deleteMarketPlace = (params) =>withPathParam(params,deleteMarketPlaceApi);
+const getMarketPlaces = _ =>withoutBody(getMarketPlacesApi)
 
-function withBody (body,onSuccessParam,onFailParam,api) { 
-    api(body,onSuccessParam,onFailParam,);
+const postLogin = (body)=>withBody(body,postLoginApi)
+
+
+function withBody (body,api) { 
+    return api(body);
 }
-function withQueryParam(queryMap,onSuccessParam,onFailParam,api) {
-    api(queryMap,onSuccessParam,onFailParam);
+function withQueryParam(queryMap,api) {
+    return api(queryMap);
 }
-function withPathParam(params,onSuccessParam,onFailParam,api) {
-    api(params,onSuccessParam,onFailParam);
+function withPathParam(params,api) {
+    return api(params);
 }
-function withoutBody (onSuccessParam,onFailParam,api) {
-    api (onSuccessParam,onFailParam);
+function withoutBody (api) {
+    return api ();
 }
 
 
@@ -54,5 +59,8 @@ export const  apiDelegateService = {
         updateMarketPlace,
         deleteMarketPlace,
         getMarketPlaces
+    } ,
+    authenticationApi : {
+        postLogin
     }
 }

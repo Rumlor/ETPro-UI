@@ -4,6 +4,7 @@ import {loginServiceObject} from "../../services/LoginService";
 import AppAlert from "../AppAlert";
 import AppBackDrop from "../AppBackDrop";
 import {useNavigate} from "react-router-dom";
+import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
 
 
 export default function Login(){
@@ -32,8 +33,8 @@ export default function Login(){
         e.preventDefault()
         console.log(loginRequest)
         if (loginRequest.userName != null && loginRequest.userPassword != null) {
-                setShowLoading(true)
-                loginServiceObject.loginService(loginRequest.userName, loginRequest.userPassword, onSuccessLogin, onFailLogin);
+               setShowLoading(true)
+               ComponentPromiseUtil.resolveResponse(loginServiceObject.loginService(loginRequest.userName, loginRequest.userPassword),onSuccessLogin,onFailLogin);
             }
         else
             setAlert({show: true,message: 'Lütfen tüm alanları girdiğinizden emin olunuz.'})

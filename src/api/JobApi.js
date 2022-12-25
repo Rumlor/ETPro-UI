@@ -6,57 +6,25 @@ import { loginServiceObject } from "../services/LoginService.js";
 const {getParameters,addParameter,deleteParameter,updateParameter} = {...globalApiWrapper.jobApi}
 
 
-export const POST_PARAMETER = (body,onSuccessComponent,onFailComponent)=>{
+export const POST_PARAMETER = (body)=>{
     const reqOptions = prepareRequestOptions(addParameter.httpMethod,getHttpHeaderWithToken(),body)
-    fetch(addParameter.url,reqOptions)
-        .then(response=>response.json())
-        .then((response)=> {
-            if (response.result){
-                onSuccessComponent(response)
-            } else {
-                onFailComponent(response)
-            }
-        })
-        .catch(reason => onFailComponent(reason))
+    return  fetch(addParameter.url,reqOptions)
+            .then(response=>response.json())
 }
-export const GET_PARAMETERS = (onSuccessComponent,onFailComponent)=>{
+export const GET_PARAMETERS = ()=>{
     const reqOptions = prepareRequestOptions(getParameters.httpMethod,getHttpHeaderWithToken(),null)
-    fetch(getParameters.url,reqOptions)
-    .then(response=>response.json())
-    .then((response)=> {
-        if (response.result){
-            onSuccessComponent(response)
-        } else {
-            loginServiceObject.navigateToLogin(response)
-            onFailComponent(response)
-        }
-    })
-    .catch(reason => onFailComponent(reason))
+    return fetch(getParameters.url,reqOptions)
+           .then(response=>response.json())
+    
 }
-export const DELETE_PARAMETER = (paramArray,onSuccessComponent,onFailComponent) =>{
+export const DELETE_PARAMETER = (paramArray) =>{
     const reqOptions = prepareRequestOptions(deleteParameter.httpMethod,getHttpHeaderWithToken(),null);
-    fetch(deleteParameter.url.concat(createUrlWithPathParams(paramArray)),reqOptions)
-    .then(response=>response.json())
-    .then((response)=> {
-        if (response.result){
-            onSuccessComponent(response)
-        } else {
-            onFailComponent(response)
-        }
-    })
-    .catch(reason => onFailComponent(reason))
+    return fetch(deleteParameter.url.concat(createUrlWithPathParams(paramArray)),reqOptions)
+           .then(response=>response.json())
 }
-export const UPDATE_TRACKING_PARAMETER = (queryMap,onSuccessComponent,onFailComponent)=>{
+export const UPDATE_TRACKING_PARAMETER = (queryMap)=>{
     const reqOptions =  prepareRequestOptions(updateParameter.httpMethod,getHttpHeaderWithToken(),null)
-    fetch(updateParameter.url.concat(createUrlWithQueryParams(queryMap)),reqOptions)
+    return fetch(updateParameter.url.concat(createUrlWithQueryParams(queryMap)),reqOptions)
+           .then(response=>response.json())
 
-        .then(response=>response.json())
-        .then((response)=> {
-            if (response.result){
-                onSuccessComponent(response)
-            } else {
-                onFailComponent(response)
-            }
-        })
-        .catch(reason => onFailComponent(reason))
 }
