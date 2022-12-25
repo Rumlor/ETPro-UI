@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import {useReducer} from "react";
 import "./MarketPlaceEdit.css"
 import { apiDelegateService } from "../../api/ApiDelegateService";
+import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
 export default function MarketPlaceEdit(props){
 const {updateMarketPlace} = apiDelegateService.marketPlaceApi;
 function initialValueSupplier() {
@@ -129,10 +130,7 @@ function transformMarketPlace(marketPlace) {
 
 function putMarketPlace(){
     const body = transformMarketPlace(marketPlace)
-        console.log('putting')
-        console.log(body)
-    updateMarketPlace(body,{success:onSuccess,fail:onFail})
-
+    ComponentPromiseUtil.resolveResponse(updateMarketPlace(body),onSuccess,onFail);
 }
 console.log('marketplace in edit')
     console.log(marketPlace)

@@ -4,6 +4,7 @@ import { Chart, registerables } from 'chart.js';
 import './css/tailwind.css'
 import './css/tailwind.output.css'
 import { apiDelegateService } from '../../api/ApiDelegateService';
+import ComponentPromiseUtil from '../../api/ComponentPromiseUtil';
 function Home(){
     Chart.register(...registerables);
     const [statisticData,setStatisticData] = useState({})
@@ -62,12 +63,8 @@ function Home(){
     } 
 
     useEffect( _ =>{
-      getStatistics({success:componentEvents.onSuccess,fail:componentEvents.onFail});
+      ComponentPromiseUtil.resolveResponse (getStatistics(),componentEvents.onSuccess,componentEvents.onFail)
     },[]);
-    console.log('====RENDER====')
-    console.log('bar config')
-    console.log(barConfig)
-    console.log('========')
     return (
         <div className={"page-heading"} style={{marginTop:50}}>
 

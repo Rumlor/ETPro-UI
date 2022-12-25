@@ -1,12 +1,15 @@
 
-import {POST_LOGIN} from "../api/AuthApi";
-
- const loginService = (userName,password,onSuccessComponent,onFailComponent) => {
+import {apiDelegateService} from "../api/ApiDelegateService";
+import ComponentPromiseUtil from "../api/ComponentPromiseUtil"
+ const loginService = (userName,password) => {
     const userLoginRequest = {
         userName:userName,
         userPassword:password
     };
-    POST_LOGIN(userLoginRequest,onSuccessLogin,onFailedLogin,onSuccessComponent,onFailComponent)
+    const promise = apiDelegateService.authenticationApi.postLogin(userLoginRequest)
+    ComponentPromiseUtil.resolveResponse(promise,onSuccessLogin,onFailedLogin);
+    return promise;
+    
 }
 
  const logoutService = ()=>{
@@ -17,16 +20,13 @@ const getAuthenticatedUserService = ()=>{
     return JSON.parse(localStorage.getItem("authenticatedUser"));
 }
 
-function onSuccessLogin(response,compSuccess) {
+function onSuccessLogin(response) {
      console.log('successful login')
     localStorage.setItem("authenticatedUser",JSON.stringify(response.object));
-    compSuccess(response)
 }
 
-function onFailedLogin(response,compFail) {
+function onFailedLogin(response) {
     console.log('failed login')
-    console.log(response)
-    compFail(response)
 }
 
 

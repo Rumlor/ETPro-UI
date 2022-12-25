@@ -20,7 +20,7 @@ import {CSSTransition} from "react-transition-group";
 import {useNavigate} from "react-router-dom";
 import {loginServiceObject} from "../../services/LoginService";
 import { apiDelegateService } from "../../api/ApiDelegateService";
-
+import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
 function MarketPlace() {
 
     //data is fed here.
@@ -39,7 +39,8 @@ useEffect(
 
         if(updateFlag) {
             setShowLoadingScreen(true)
-            getMarketPlaces({success:onApiSuccess,fail:onApiFail})
+            ComponentPromiseUtil.resolveResponse(getMarketPlaces(),onApiSuccess,onApiFail);
+            
             setUpdateFlag(false)
         }
 

@@ -4,17 +4,9 @@ import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHead
 const {getDashboardStatistics} = globalApiWrapper.statisticApi
 
 
-export const GET_STATISTICS = (onSuccessComponent,onFailComponent)=>{
+export const GET_STATISTICS = _=>{
     const reqOptions = prepareRequestOptions(getDashboardStatistics.httpMethod,getHttpHeaderWithToken(),null);
-    fetch(getDashboardStatistics.url,reqOptions)
-    .then(response=>response.json())
-    .then((response)=> {
-        if (response.result){
-            onSuccessComponent(response)
-        } else {
-            onFailComponent(response)
-        }
-    })
-    .catch(reason => onFailComponent(reason))
+    return fetch(getDashboardStatistics.url,reqOptions)
+            .then(response=>response.json());
 }
 

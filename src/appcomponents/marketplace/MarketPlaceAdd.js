@@ -6,8 +6,7 @@ import {useRef, useState} from "react";
 import "./MarketPlaceAdd.css";
 import ShipmentInfoAccordion from "../shipment/ShipmentInfoAccordion";
 import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
-
-
+import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
 import { apiDelegateService} from "../../api/ApiDelegateService";
 import {CSSTransition} from "react-transition-group";
 import { useNavigate } from "react-router-dom";
@@ -116,7 +115,7 @@ function saveMarketPlaceAPI() {
     }
        const validationResult =  validateState();
     if (validationResult.result) {
-        postMarketPlace(marketPlace,{success:onApiSuccess, fail:onApiFail})
+        ComponentPromiseUtil.resolveResponse(postMarketPlace(marketPlace),onApiSuccess,onApiFail);
         setIsSaveDialogOpen(false)
     } else {
         setShowApiFail(true)
