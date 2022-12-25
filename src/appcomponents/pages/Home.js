@@ -3,11 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import './css/tailwind.css'
 import './css/tailwind.output.css'
-import { GET_STATISTICS } from '../../api/StatisticApi';
+import { apiDelegateService } from '../../api/ApiDelegateService';
 function Home(){
     Chart.register(...registerables);
     const [statisticData,setStatisticData] = useState({})
-
+    const  {getStatistics} = apiDelegateService.statisticsApi;
     const barConfigInitial = {
       type: 'bar',
       data: {
@@ -30,8 +30,6 @@ function Home(){
         },
       },
     }
-    const [barConfig,setBarConfig] = useState(barConfigInitial)
-
     const componentEvents = {
       onSuccess : (e) =>{
         console.log(e);
@@ -47,6 +45,7 @@ function Home(){
         console.log(e);
       }
     }
+    const [barConfig,setBarConfig] = useState(barConfigInitial)
     function updateBarConfig(chartData) {
       console.log('updating bar config')
       console.log(chartData)
@@ -62,9 +61,8 @@ function Home(){
       setBarConfig(copiedBarConfig);
     } 
 
-    
     useEffect( _ =>{
-        GET_STATISTICS(componentEvents.onSuccess,componentEvents.onFail);
+      getStatistics({success:componentEvents.onSuccess,fail:componentEvents.onFail});
     },[]);
     console.log('====RENDER====')
     console.log('bar config')

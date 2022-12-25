@@ -1,15 +1,14 @@
 import * as React from 'react';
 import {
-    AppBar,
     Box,
     Button,
-    Collapse, Dialog, Divider,
-    IconButton, List, ListItem, ListItemText,
+    Collapse, 
+    IconButton, 
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TableRow, Toolbar,
+    TableRow,
     Typography
 } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -17,20 +16,21 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CheckIcon from '@mui/icons-material/Check';
 import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 import DeleteIcon from "@mui/icons-material/Delete";
-import {DELETE_MARKETPLACE} from "../../api/MarketplaceApi";
 import ListIcon from '@mui/icons-material/List';
 import {useState} from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import ThresholdListItem from '../thresholdList/ThresholdListItem'
 import MarketPlaceEdit from "./MarketPlaceEdit";
+import { apiDelegateService } from '../../api/ApiDelegateService';
 export default function TableCollapsibleRow(props) {
+    const {deleteMarketPlace} = apiDelegateService.marketPlaceApi
     const [open, setOpen] = React.useState(false);
     const [openThresholdList,setOpenThresholdList] = useState(false)
     const [showUpdateMarketPlace,setShowUpdateMarketPlace] = useState(false)
     const [shipmentIndexForThreshold,setShipmentIndexForThreshold] = useState(null)
     function deleteAction() {
         console.log('platform name to be deleted '+props.marketPlace.platformName)
-        DELETE_MARKETPLACE(props.marketPlace.platformName,onSuccessApi,onFailApi);
+        deleteMarketPlace([props.marketPlace.platformName],{success:onSuccessApi,fail:onFailApi});
         props.setLoadingScreen(true)
     }
     function onSuccessApi(response) {

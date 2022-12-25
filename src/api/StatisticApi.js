@@ -1,4 +1,4 @@
-import {API, globalApiWrapper} from "./ApiList.js"
+import { globalApiWrapper} from "./ApiList.js"
 import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHeaderAndMiscService";
 
 const {getDashboardStatistics} = globalApiWrapper.statisticApi

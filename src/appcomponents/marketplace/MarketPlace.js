@@ -5,8 +5,7 @@ import "./MarketPlace.css"
 import {
     Alert,
     Backdrop,
-    Button,
-    ButtonGroup, CircularProgress,
+    CircularProgress,
     Paper,
     Table,
     TableBody,
@@ -17,15 +16,16 @@ import {
     Typography
 } from "@mui/material";
 import TableCollapsibleRow from "./TableCollapsibleRow";
-import {GET_MARKETPLACES} from "../../api/MarketplaceApi";
 import {CSSTransition} from "react-transition-group";
 import {useNavigate} from "react-router-dom";
 import {loginServiceObject} from "../../services/LoginService";
+import { apiDelegateService } from "../../api/ApiDelegateService";
 
 function MarketPlace() {
 
     //data is fed here.
 const navigator = useNavigate();
+const {getMarketPlaces} = apiDelegateService.marketPlaceApi;
 const [marketPlaces,setMarketPlaces] = useState([]);
 const [updateFlag,setUpdateFlag] = useState(true)
 const [showApiFail,setShowApiFail] = useState(false)
@@ -39,7 +39,7 @@ useEffect(
 
         if(updateFlag) {
             setShowLoadingScreen(true)
-            GET_MARKETPLACES(null, onApiSuccess, onApiFail)
+            getMarketPlaces({success:onApiSuccess,fail:onApiFail})
             setUpdateFlag(false)
         }
 

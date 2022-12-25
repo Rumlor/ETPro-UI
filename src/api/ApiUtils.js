@@ -1,4 +1,4 @@
-export const createUrlWithPathParams= (...params)=>{
+export const createUrlWithPathParams= (params)=>{
    return "/" + params.join("/")
 }
 export const createUrlWithQueryParams = (keyValueQueryParam)=>{

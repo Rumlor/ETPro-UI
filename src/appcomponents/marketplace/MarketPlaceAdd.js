@@ -7,7 +7,8 @@ import "./MarketPlaceAdd.css";
 import ShipmentInfoAccordion from "../shipment/ShipmentInfoAccordion";
 import CommissionInfoAccordion from "../commission/CommissionInfoAccordion";
 
-import  {POST_MARKETPLACE} from "../../api/MarketplaceApi";
+
+import { apiDelegateService} from "../../api/ApiDelegateService";
 import {CSSTransition} from "react-transition-group";
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function MarketPlaceAdd(){
     const platformNameRef = useRef();
+    const {postMarketPlace} = apiDelegateService.marketPlaceApi;
     const initial = {
         platformName:null,
         commissionAmounts: [],
@@ -114,7 +116,7 @@ function saveMarketPlaceAPI() {
     }
        const validationResult =  validateState();
     if (validationResult.result) {
-        POST_MARKETPLACE(marketPlace,onApiSuccess, onApiFail)
+        postMarketPlace(marketPlace,{success:onApiSuccess, fail:onApiFail})
         setIsSaveDialogOpen(false)
     } else {
         setShowApiFail(true)
