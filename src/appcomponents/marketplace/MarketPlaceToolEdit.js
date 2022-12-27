@@ -9,8 +9,11 @@ export default function MarketPlaceToolEdit (props){
           setChangedProductParameter(selectedProductParameter);
     },[isOpen])
     return (
-        isOpen ?      
+        isOpen ?
         <div
+        class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
+        >
+                  <div
         class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
         role="dialog"
         id="modal"
@@ -19,6 +22,7 @@ export default function MarketPlaceToolEdit (props){
           <button
             class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700"
             aria-label="close"
+            onClick={()=>setOpen(false)}
           >
             <svg
               class="w-4 h-4"
@@ -88,7 +92,9 @@ export default function MarketPlaceToolEdit (props){
             Kaydet
           </button>
         </footer>
-      </div> 
+                  </div> 
+        </div>        
+
       : 
       <></>
     );
