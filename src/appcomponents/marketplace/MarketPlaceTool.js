@@ -5,6 +5,7 @@ import '../pages/css/tailwind.css'
 import '../pages/css/tailwind.output.css'
 import { apiDelegateService } from "../../api/ApiDelegateService"
 import ComponentPromiseUtil from "../../api/ComponentPromiseUtil"
+import MarketPlaceToolEdit from "./MarketPlaceToolEdit"
 export default function MarketPlaceTool(){
     const {updateParameter,getParameters,deleteParameter,postParameter} = apiDelegateService.parameterApi;
     const initialState = {
@@ -17,9 +18,11 @@ export default function MarketPlaceTool(){
         productAmountUpperBound:'',
         marketPlaceType:'TRENDYOL'
     }
+    const [openUpdateModel,setOpenUpdateModal] = useState(false);
     const [updateFlag,setUpdateFlag] = useState(true);
     const [fetchedMerchantProductParameters,setFetchedMerchantProductParameters] = useState(null);
     const [merchantProductParameter,setMerchantProductParameter] = useState(initialState)
+    const [selectedProductParameter,setSelectedProductParameter] = useState({})
     const [toolAlert,setToolAlert] = useState({show:false,message:null,error:true})
     useEffect(()=>{
         
@@ -92,6 +95,7 @@ export default function MarketPlaceTool(){
         ComponentPromiseUtil.resolveResponse(deleteParameter([marketPlaceType,productCode]),onSuccessDelete,onFailedDelete);
     }
     const submitTrackingUpdate = (index,isTracked) =>{
+      console.log('updating parameter!!')
       const queryMap = new Map();
       const {productCode,marketPlaceType} = getProductCodeAndMarketPlaceForIndex(index);
       queryMap.set('isTracked',isTracked)
@@ -99,7 +103,18 @@ export default function MarketPlaceTool(){
       queryMap.set('marketPlaceType',marketPlaceType)
       ComponentPromiseUtil.resolveResponse(updateParameter(queryMap),onSuccessUpdate,onFailedUpdate);
     }
-
+    const takeParameterUpdateFromChild=(changedProduct)=>{
+      console.log('updating parameter!!')
+      const queryMap = new Map();
+      queryMap.set('isTracked',changedProduct.isTracked)
+      queryMap.set('productCode',changedProduct.productCode)
+      queryMap.set('marketPlaceType',changedProduct.marketPlaceType)
+      queryMap.set('toleranceAmount',changedProduct.toleranceAmount)
+      queryMap.set('lowerLimit',changedProduct.productAmountLowerBound)
+      queryMap.set('upperLimit',changedProduct.productAmountUpperBound)
+      console.log(queryMap)
+      ComponentPromiseUtil.resolveResponse(updateParameter(queryMap),onSuccessUpdate,onFailedUpdate);
+    }
     return (
 
         <div className="root">
@@ -196,6 +211,7 @@ export default function MarketPlaceTool(){
               <button type="button" className="button clear" onClick={clearForm}>Temizle</button>
                           
             </div>
+            <MarketPlaceToolEdit setOpen={setOpenUpdateModal} isOpen = {openUpdateModel} selectedProductParameter = {selectedProductParameter} updateParameter={takeParameterUpdateFromChild} />
             <div className="parameterTable">
                 <span>{ fetchedMerchantProductParameters ? `Takip Edilen Ürün Sayısı:  ${fetchedMerchantProductParameters.filter(element=>element.isTracked).length}` : ''}</span>
                 <table>
@@ -207,6 +223,7 @@ export default function MarketPlaceTool(){
                         <th>Min Rekabet Fiyatı</th>
                         <th>Max Rekabet Fiyatı</th>
                         <th>Pazar Yeri</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -248,6 +265,9 @@ export default function MarketPlaceTool(){
                                             {
                                                 item.marketPlaceType
                                             }
+                                        </td>
+                                        <td>
+                                        <button type="button" className="button update" onClick={()=>{setOpenUpdateModal(true);setSelectedProductParameter(item)}}>Güncelle</button>
                                         </td>
                                         <td>
                                           <button type="button" className="button clear" onClick={()=>submitDeleteParameter(index)}>Sil</button>
