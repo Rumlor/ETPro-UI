@@ -6,7 +6,7 @@ export  const AuthenticatedRoute = ({component}) =>{
     return (
         <>
             {
-                loginServiceObject.getAuthenticatedUserService() ? component : <Navigate to={{pathname:'/login'}} />
+                loginServiceObject.getAuthenticatedUserService() ? component : component 
             }
         </>
     )

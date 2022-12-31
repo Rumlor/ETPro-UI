@@ -13,6 +13,7 @@ import {AuthenticatedRoute} from "./AuthenticatedRoute";
 import {ComponentWithNav} from "./navbar/ComponentWithNav";
 import NotFound from "./pages/NotFound";
 import MarketPlaceTool from "./marketplace/MarketPlaceTool";
+import MarketPlaceAddUpgraded from "./marketplace/MarketPlaceAddUpgraded";
 function App() {
     const authenticatedUser = loginServiceObject.getAuthenticatedUserService();
     console.log('authenticated user')
@@ -24,9 +25,10 @@ function App() {
                 <Route path={"/login"}  element={<Login/>}></Route>
                 <Route path={"/"}  element={<AuthenticatedRoute component={<ComponentWithNav  component={<Home/>} />} />}></Route>
                 <Route path={"/marketplaces/list"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<MarketPlace/>} />} />}></Route>
-                <Route path={"/marketplaces/add"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<MarketPlaceAdd/>} />} />}></Route>
+                <Route path={"/marketplaces/add"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<MarketPlaceAddUpgraded/>} />} />}></Route>
                 <Route path={"/marketplaces/tool"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<MarketPlaceTool/>} />} />}></Route>
                 <Route path={"/products"}  element= {<AuthenticatedRoute component = {<ComponentWithNav  component={<Product/>} />} />}></Route>
+
             </Routes>
         </BrowserRouter>
     );
