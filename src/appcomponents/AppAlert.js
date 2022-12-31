@@ -2,7 +2,6 @@ import {CSSTransition} from "react-transition-group";
 import {Alert} from "@mui/material";
 import "./AppAlert.css"
 export default function AppAlert(props){
-
     return (
 
         <div className={"alert"}>
