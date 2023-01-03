@@ -6,7 +6,7 @@ export  const AuthenticatedRoute = ({component}) =>{
     return (
         <>
             {
-                loginServiceObject.getAuthenticatedUserService() ? component : component 
+                loginServiceObject.getAuthenticatedUserService() ? component : component
             }
         </>
     )

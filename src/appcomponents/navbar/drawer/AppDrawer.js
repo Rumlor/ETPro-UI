@@ -55,7 +55,8 @@ export default function AppDrawer(props){
                 )
             case "Pazar Yeri Listele":
                 return (<ViewList/>)
-            case "Ürünler":
+            case "Ürün Excel":
+            case "Ürün Tanımlama":    
                 return  (<Inventory/>)
             case "Çıkış Yap":
                 return (<Logout/>)

@@ -1,10 +1,11 @@
-import {Box, Button, Typography} from "@mui/material";
-import {DataGrid, GridToolbar} from "@mui/x-data-grid";
+import {Box, Button} from "@mui/material";
+import {DataGrid} from "@mui/x-data-grid";
 import * as XLSX from "xlsx";
 import {useState} from "react";
-import {POST_PRODUCT_CALCULATOR, POST_PRODUCT_EXPORT_EXCEL} from "../../api/ProductApi";
+import { apiDelegateService } from "../../api/ApiDelegateService";
+import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
 
-function Product(){
+function ProductCalculator(){
     const importedColumns = [
         {
             field:'productCode',
@@ -22,13 +23,14 @@ function Product(){
             width:200,
         }
     ];
+    const {postProductCalculator,postProductExportExcel} = apiDelegateService.productApi
     const [importedRows,setImportedRows]=useState([]);
     const [importedCalculatedColumns,setImportedCalculatedColumns] = useState([])
     const [importedCalculatedRows,setImportedCalculatedRows] = useState([])
 
     function prepareRows(result) {
         const rows = []
-        result.map((item,index)=>{
+        result.forEach((item,index)=>{
             const row = {
                 id:index,
                 productCode:item[0],
@@ -55,7 +57,7 @@ function Product(){
 
     function prepareCalculatedRows(calculatedList) {
         const rows = []
-        calculatedList.map((item,index)=>{
+        calculatedList.forEach((item,index)=>{
             let row = {}
             row.id  = index
             row.productCode = item.product.productCode
@@ -124,17 +126,11 @@ function Product(){
     function onExportFail(res) {
         console.log('export response fail')
         console.log(res)
-        const url =  window.URL.createObjectURL( new Blob([res]));
-        const doc = document.createElement("a");
-        doc.href = url;
-        doc.setAttribute("download","products.xlsx");
-        document.body.appendChild(doc);
-        doc.click();
     }
 
     function calculateAPI() {
-        POST_PRODUCT_CALCULATOR(importedRows,onSuccess,onFail)
-        POST_PRODUCT_EXPORT_EXCEL(importedRows,onExportSuccess,onExportFail);
+       ComponentPromiseUtil.resolveResponse(postProductCalculator(importedRows),onSuccess,onFail)
+       ComponentPromiseUtil.resolveResponse(postProductExportExcel(importedRows),onExportSuccess,onExportFail)
     }
 
     return (
@@ -182,4 +178,4 @@ function Product(){
     );
 }
 
-export default Product;
+export default ProductCalculator;
