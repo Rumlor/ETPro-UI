@@ -14,6 +14,9 @@ import {
     
  import {POST_LOGIN as postLoginApi} from "./AuthApi"   
 
+ import { POST_PRODUCT_CALCULATOR as postProductCalculatorApi ,
+          POST_PRODUCT_EXPORT_EXCEL as postProductExportExcelApi } from "./ProductApi"
+
 const getStatistics = _ => withoutBody(getStatisticsApi);
 
 const postParameter = (body) => withBody(body,postParameterApi);
@@ -29,6 +32,8 @@ const getMarketPlaces = _ =>withoutBody(getMarketPlacesApi)
 
 const postLogin = (body)=>withBody(body,postLoginApi)
 
+const postProductCalculator = (body)=>withBody(body,postProductCalculatorApi)
+const postProductExportExcel = (body)=>withBody(body,postProductExportExcelApi)
 
 function withBody (body,api) { 
     return api(body);
@@ -62,5 +67,9 @@ export const  apiDelegateService = {
     } ,
     authenticationApi : {
         postLogin
+    },
+    productApi : {
+        postProductCalculator,
+        postProductExportExcel
     }
 }

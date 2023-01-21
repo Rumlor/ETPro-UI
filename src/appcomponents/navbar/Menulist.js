@@ -19,12 +19,16 @@ export const Menulist = [
     },
     {
         title:"Ürünler",
-        url:"/products",
+        url:"/products/add",
         subMenus: [
             {
-                title: "Ürünler",
-                url: "/products"
-            }
+                title: "Ürün Excel",
+                url: "/products/calculate"
+            },
+            {
+                title: "Ürün Tanımlama",
+                url: "/products/add"
+            },
         ]
     },
     {
