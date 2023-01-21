@@ -37,6 +37,10 @@ export const globalApiWrapper = {
         exportProduct : {
             httpMethod: "POST",
             url: apiOrigin + "product/export"
+        },
+        importProduct : {
+            httpMethod: "POST",
+            url: apiOrigin + "product/import"
         }
     },
     statisticApi : {

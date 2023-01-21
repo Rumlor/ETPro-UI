@@ -15,6 +15,7 @@ import {
  import {POST_LOGIN as postLoginApi} from "./AuthApi"   
 
  import { POST_PRODUCT_CALCULATOR as postProductCalculatorApi ,
+          POST_PRODUCT_IMPORT_EXCEL as postProductImportExcelApi ,
           POST_PRODUCT_EXPORT_EXCEL as postProductExportExcelApi } from "./ProductApi"
 
 const getStatistics = _ => withoutBody(getStatisticsApi);
@@ -70,6 +71,7 @@ export const  apiDelegateService = {
     },
     productApi : {
         postProductCalculator,
-        postProductExportExcel
+        postProductExportExcel,
+        postProductImportExcelApi
     }
 }

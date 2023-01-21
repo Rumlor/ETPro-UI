@@ -4,14 +4,23 @@ import '../pages/css/tailwind.css'
 import '../pages/css/tailwind.output.css'
 import {Button} from "@mui/material";
 import * as XLSX from "xlsx";
+import {apiDelegateService} from "../../api/ApiDelegateService";
+import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
 export default class ProductAddExtended extends Component {
     state = {
       isExcelForm : false
     }
+    postProductImportExcelApi = apiDelegateService.productApi.postProductImportExcelApi
+    onSuccessUpload(res){
+
+    }
+    onFailedUpload(res){
+
+    }
 
     handleExcelAction(e){
         const excelFile =  e.target.files[0]
-
+        ComponentPromiseUtil.resolveResponse(this.postProductImportExcelApi(excelFile),this.onSuccessUpload,this.onFailedUpload)
     }
 
     render(){
