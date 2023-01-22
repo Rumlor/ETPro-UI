@@ -35,7 +35,7 @@ const postLogin = (body)=>withBody(body,postLoginApi)
 
 const postProductCalculator = (body)=>withBody(body,postProductCalculatorApi)
 const postProductExportExcel = (body)=>withBody(body,postProductExportExcelApi)
-
+const postProductImportExcel = (body) =>withBody(body,postProductImportExcelApi)
 function withBody (body,api) { 
     return api(body);
 }
@@ -72,6 +72,6 @@ export const  apiDelegateService = {
     productApi : {
         postProductCalculator,
         postProductExportExcel,
-        postProductImportExcelApi
+        postProductImportExcel
     }
 }

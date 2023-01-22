@@ -1,33 +1,65 @@
-import { Component } from "react";
+import {Component, useState} from "react";
 import "./ProductAdd.css"
 import '../pages/css/tailwind.css'
 import '../pages/css/tailwind.output.css'
-import {Button} from "@mui/material";
-import * as XLSX from "xlsx";
+import {Backdrop, Button, CircularProgress} from "@mui/material";
 import {apiDelegateService} from "../../api/ApiDelegateService";
 import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
+import AppAlert from "../AppAlert";
+
+
 export default class ProductAddExtended extends Component {
     state = {
-      isExcelForm : false
+      isExcelForm : false,
+      toolAlert : {
+          show: false,
+          message: null,
+          error: true
+      },
+      showLoadingScreen : false
     }
-    postProductImportExcelApi = apiDelegateService.productApi.postProductImportExcelApi
-    onSuccessUpload(res){
 
+    onSuccessUpload(res){
+        console.log('SUCCESS')
+        this.setState(
+            {...this.state,
+            showLoadingScreen:false ,
+            toolAlert:{show:true,message:`${res.object.updatedProductCount} ürün güncellendi , ${res.object.addedProductCount} ürün eklendi`}}
+        )
     }
     onFailedUpload(res){
-
+        console.log('FAILED')
+        this.setState(
+            {...this.state,
+                showLoading:false,
+                toolAlert:{show:true,message:`Hata . ${res.error}`}}
+        )
     }
 
+    setAlert(alert){
+        this.setState({...this.state,toolAlert:alert})
+    }
     handleExcelAction(e){
+        const postProductImportExcel =  apiDelegateService.productApi.postProductImportExcel
         const excelFile =  e.target.files[0]
-        ComponentPromiseUtil.resolveResponse(this.postProductImportExcelApi(excelFile),this.onSuccessUpload,this.onFailedUpload)
+        const formData = new FormData()
+        formData.append('productExcelFile',excelFile)
+        this.setState({...this.state,showLoadingScreen:true})
+        ComponentPromiseUtil.resolveResponse(postProductImportExcel(formData),this.onSuccessUpload.bind(this),this.onFailedUpload.bind(this))
     }
 
     render(){
        console.log(this.state)
        return (
         <div className="root">
-          <button type="button" className="button"
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={this.state.showLoadingScreen}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+            <AppAlert error = {this.state.toolAlert.error} message={this.state.toolAlert.message} show={this.state.toolAlert.show} setAlert={this.setAlert.bind(this)}></AppAlert>
+            <button type="button" className="button"
                   onClick={()=>this.setState({...this.state,isExcelForm:!this.state.isExcelForm})}>
             {this.state.isExcelForm ?'Form Girişi' : 'Excel Girişi'}
           </button>

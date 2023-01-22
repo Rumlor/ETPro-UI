@@ -1,5 +1,9 @@
 import {globalApiWrapper} from "./ApiList";
-import {getHttpHeaderWithToken,prepareRequestOptions} from "../services/HttpHeaderAndMiscService";
+import {
+    getHttpHeaderWithToken,
+    prepareRequestOptions,
+    prepareRequestOptionsFormData
+} from "../services/HttpHeaderAndMiscService";
 
 const {calculateProduct,exportProduct,importProduct} = {...globalApiWrapper.productApi}
 
@@ -15,9 +19,8 @@ export const POST_PRODUCT_EXPORT_EXCEL = (body) =>{
 
 
 }
-
 export const POST_PRODUCT_IMPORT_EXCEL =(body)=>{
-    const reqOptions  = prepareRequestOptions(exportProduct.httpMethod,getHttpHeaderWithToken(),body)
-    return fetch(exportProduct.url,reqOptions)
+    const reqOptions  = prepareRequestOptionsFormData(importProduct.httpMethod,getHttpHeaderWithToken(),body)
+    return fetch(importProduct.url,reqOptions)
         .then(response=>response.json())
 }
