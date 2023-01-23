@@ -16,7 +16,9 @@ import {
 
  import { POST_PRODUCT_CALCULATOR as postProductCalculatorApi ,
           POST_PRODUCT_IMPORT_EXCEL as postProductImportExcelApi ,
-          POST_PRODUCT_EXPORT_EXCEL as postProductExportExcelApi } from "./ProductApi"
+          POST_PRODUCT_EXPORT_EXCEL as postProductExportExcelApi ,
+          GET_PRODUCT_LIST as getProductListApi ,
+          DELETE_PRODUCT as deleteProductApi } from "./ProductApi"
 
 const getStatistics = _ => withoutBody(getStatisticsApi);
 
@@ -36,7 +38,10 @@ const postLogin = (body)=>withBody(body,postLoginApi)
 const postProductCalculator = (body)=>withBody(body,postProductCalculatorApi)
 const postProductExportExcel = (body)=>withBody(body,postProductExportExcelApi)
 const postProductImportExcel = (body) =>withBody(body,postProductImportExcelApi)
-function withBody (body,api) { 
+const getProductList = () => withoutBody(getProductListApi);
+const deleteProduct = (params) =>withPathParam(params,deleteProductApi);
+
+function withBody (body,api) {
     return api(body);
 }
 function withQueryParam(queryMap,api) {
@@ -72,6 +77,8 @@ export const  apiDelegateService = {
     productApi : {
         postProductCalculator,
         postProductExportExcel,
-        postProductImportExcel
+        postProductImportExcel,
+        getProductList,
+        deleteProduct
     }
 }

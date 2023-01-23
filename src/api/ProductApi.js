@@ -4,8 +4,9 @@ import {
     prepareRequestOptions,
     prepareRequestOptionsFormData
 } from "../services/HttpHeaderAndMiscService";
+import {createUrlWithPathParams} from "./ApiUtils";
 
-const {calculateProduct,exportProduct,importProduct} = {...globalApiWrapper.productApi}
+const {calculateProduct,exportProduct,importProduct,getProductList,deleteProduct} = {...globalApiWrapper.productApi}
 
 export  const POST_PRODUCT_CALCULATOR = (body)=>{
     const reqOptions  = prepareRequestOptions(calculateProduct.httpMethod,getHttpHeaderWithToken(),body)
@@ -19,6 +20,21 @@ export const POST_PRODUCT_EXPORT_EXCEL = (body) =>{
 
 
 }
+
+export const GET_PRODUCT_LIST = (_) =>{
+    const reqOptions  = prepareRequestOptions(getProductList.httpMethod,getHttpHeaderWithToken(),null)
+    return fetch(getProductList.url,reqOptions)
+        .then(response=>response.json())
+
+
+}
+
+export const DELETE_PRODUCT = (paramArray) =>{
+    const reqOptions = prepareRequestOptions(deleteProduct.httpMethod,getHttpHeaderWithToken(),null);
+    return fetch(deleteProduct.url.concat(createUrlWithPathParams(paramArray)),reqOptions)
+        .then(response=>response.json())
+}
+
 export const POST_PRODUCT_IMPORT_EXCEL =(body)=>{
     const reqOptions  = prepareRequestOptionsFormData(importProduct.httpMethod,getHttpHeaderWithToken(),body)
     return fetch(importProduct.url,reqOptions)

@@ -41,6 +41,14 @@ export const globalApiWrapper = {
         importProduct : {
             httpMethod: "POST",
             url: apiOrigin + "product/import"
+        },
+        getProductList : {
+            httpMethod: "GET",
+            url: apiOrigin + "product/get"
+        },
+        deleteProduct : {
+            httpMethod: "DELETE",
+            url: apiOrigin + "product"
         }
     },
     statisticApi : {
