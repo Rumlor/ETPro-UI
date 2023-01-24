@@ -6,6 +6,7 @@ import {Backdrop, Button, CircularProgress} from "@mui/material";
 import {apiDelegateService} from "../../api/ApiDelegateService";
 import ComponentPromiseUtil from "../../api/ComponentPromiseUtil";
 import AppAlert from "../AppAlert";
+import ProductAddEdit from "./ProductAddEdit";
 
 
 
@@ -19,19 +20,31 @@ export default class ProductAddExtended extends Component {
           error: true
       },
       showLoadingScreen : false,
+      openUpdateModal : false,
+      selectedProduct : {},
       productList : [],
       copyProductList: []
     }
 
+    constructor(props) {
+        super(props);
+        this.onSuccessGetList = this.onSuccessGetList.bind(this);
+        this.onSuccessUpload = this.onSuccessUpload.bind(this);
+        this.onSuccessDelete = this.onSuccessDelete.bind(this);
+
+        this.onFailedGetList = this.onFailedGetList.bind(this);
+        this.onFailedUpload = this.onFailedUpload.bind(this);
+        this.onFailedDelete = this.onFailedDelete.bind(this);
+    }
     onSuccessUpload(res){
         console.log('SUCCESS')
         this.setState(
-            {...this.state,
-            showLoadingScreen:false ,
-            toolAlert:{show:true,message:`${res.object.updatedProductCount} ürün güncellendi , ${res.object.addedProductCount} ürün eklendi`}}
-        )
+            {
+                    ...this.state,
+                    toolAlert:{show:true,message:`${res.object.updatedProductCount} ürün güncellendi , ${res.object.addedProductCount} ürün eklendi`}
+                })
         const getProductList =  apiDelegateService.productApi.getProductList;
-        ComponentPromiseUtil.resolveResponse(getProductList(),this.onSuccessGetList.bind(this),this.onFailedGetList.bind(this))
+        ComponentPromiseUtil.resolveResponse(getProductList(),this.onSuccessGetList,this.onFailedGetList)
     }
     onFailedUpload(res){
         console.log('FAILED')
@@ -59,7 +72,7 @@ export default class ProductAddExtended extends Component {
     }
     onSuccessDelete(res){
         const getProductList =  apiDelegateService.productApi.getProductList;
-        ComponentPromiseUtil.resolveResponse(getProductList(),this.onSuccessGetList.bind(this),this.onFailedGetList.bind(this))
+        ComponentPromiseUtil.resolveResponse(getProductList(),this.onSuccessGetList,this.onFailedGetList)
     }
     onFailedDelete(res){
 
@@ -67,29 +80,36 @@ export default class ProductAddExtended extends Component {
     setAlert(alert){
         this.setState({...this.state,toolAlert:alert})
     }
+    setUpdateAlert(alert){
+        this.setState({...this.state,openUpdateModal:false,toolAlert:alert})
+        const getProductList =  apiDelegateService.productApi.getProductList;
+        ComponentPromiseUtil.resolveResponse(getProductList(),this.onSuccessGetList,this.onFailedGetList)
+    }
 
     deleteProductByIndex(index) {
         const productCode = document.getElementById(`row_${index}-product-code`).innerText
         console.log(productCode);
         const deleteProduct =  apiDelegateService.productApi.deleteProduct
         this.setState({...this.state,showLoadingScreen:true})
-        ComponentPromiseUtil.resolveResponse(deleteProduct([productCode]),this.onSuccessDelete.bind(this),this.onFailedDelete.bind(this))
+        ComponentPromiseUtil.resolveResponse(deleteProduct([productCode]),this.onSuccessDelete,this.onFailedDelete)
 
     }
     handleExcelAction(e){
         const postProductImportExcel =  apiDelegateService.productApi.postProductImportExcel
         const excelFile =  e.target.files[0]
-        const formData = new FormData()
-        formData.append('productExcelFile',excelFile)
-        this.setState({...this.state,showLoadingScreen:true})
-        ComponentPromiseUtil.resolveResponse(postProductImportExcel(formData),this.onSuccessUpload.bind(this),this.onFailedUpload.bind(this))
+        if(excelFile!=null) {
+            const formData = new FormData()
+            formData.append('productExcelFile', excelFile)
+            this.setState({...this.state, showLoadingScreen: true})
+            ComponentPromiseUtil.resolveResponse(postProductImportExcel(formData), this.onSuccessUpload, this.onFailedUpload)
+        }
     }
 
     componentDidMount() {
         console.log('component did mount')
         const getProductList =  apiDelegateService.productApi.getProductList;
         this.setState({...this.state,showLoadingScreen:true})
-        ComponentPromiseUtil.resolveResponse(getProductList(),this.onSuccessGetList.bind(this),this.onFailedGetList.bind(this))
+        ComponentPromiseUtil.resolveResponse(getProductList(),this.onSuccessGetList,this.onFailedGetList)
     }
 
     render(){
@@ -116,6 +136,7 @@ export default class ProductAddExtended extends Component {
                       Ürünleri Yükle
                       <input hidden accept=".xlsx"
                              multiple type="file"
+                             onClick={(e)=>{e.target.value = null}}
                              onChange={this.handleExcelAction.bind(this)}
                               />
                     </Button>
@@ -124,7 +145,10 @@ export default class ProductAddExtended extends Component {
                   <></>
             }
             </div>
-
+          <ProductAddEdit open = {this.state.openUpdateModal}
+                          setOpen = {this.setModalOpen.bind(this)}
+                          setUpdateAlert = {this.setUpdateAlert.bind(this)}
+                          selectedProduct = {this.state.selectedProduct}/>
           <table>
             <tr>
               <th>
@@ -171,7 +195,11 @@ export default class ProductAddExtended extends Component {
                                   }
                               </td>
                               <td>
-                                  <button type="button" className="button update">Güncelle</button>
+                                  <button type="button" className="button update" onClick={()=>{
+                                      this.setState({
+                                          ...this.state,
+                                          selectedProduct:item,
+                                          openUpdateModal:true})}}>Güncelle</button>
                               </td>
                               <td>
                                   <button type="button" className="button clear" onClick={()=>this.deleteProductByIndex(index)}>Sil</button>
@@ -188,5 +216,9 @@ export default class ProductAddExtended extends Component {
     filterProductListForSearch(value) {
        const newArray =  this.state.copyProductList.filter(product => product.productCode.includes(value));
         this.setState({...this.state,productList:newArray})
+    }
+
+    setModalOpen(value) {
+        this.setState({...this.state,openUpdateModal:value})
     }
 }

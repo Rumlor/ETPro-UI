@@ -49,6 +49,10 @@ export const globalApiWrapper = {
         deleteProduct : {
             httpMethod: "DELETE",
             url: apiOrigin + "product"
+        },
+        updateProduct: {
+            httpMethod : "PATCH",
+            url: apiOrigin + "product/update"
         }
     },
     statisticApi : {

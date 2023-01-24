@@ -18,7 +18,8 @@ import {
           POST_PRODUCT_IMPORT_EXCEL as postProductImportExcelApi ,
           POST_PRODUCT_EXPORT_EXCEL as postProductExportExcelApi ,
           GET_PRODUCT_LIST as getProductListApi ,
-          DELETE_PRODUCT as deleteProductApi } from "./ProductApi"
+          DELETE_PRODUCT as deleteProductApi,
+          PATCH_PRODUCT_UPDATE as patchProductApi } from "./ProductApi"
 
 const getStatistics = _ => withoutBody(getStatisticsApi);
 
@@ -40,7 +41,7 @@ const postProductExportExcel = (body)=>withBody(body,postProductExportExcelApi)
 const postProductImportExcel = (body) =>withBody(body,postProductImportExcelApi)
 const getProductList = () => withoutBody(getProductListApi);
 const deleteProduct = (params) =>withPathParam(params,deleteProductApi);
-
+const patchProduct = (body) =>withBody(body,patchProductApi);
 function withBody (body,api) {
     return api(body);
 }
@@ -79,6 +80,7 @@ export const  apiDelegateService = {
         postProductExportExcel,
         postProductImportExcel,
         getProductList,
-        deleteProduct
+        deleteProduct,
+        patchProduct
     }
 }
